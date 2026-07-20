@@ -1,6 +1,9 @@
-import { createRootRoute, Link } from "@tanstack/react-router";
+import Navbar from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
+  component: Navbar,
   notFoundComponent: () => {
     return (
       <div className="min-h-dvh w-full flex flex-col items-center justify-center p-6 bg-slate-50/50">
@@ -25,12 +28,7 @@ export const Route = createRootRoute({
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/">
-                <button
-                  size="lg"
-                  className="h-14 px-8 rounded-md border-2 border-slate-200 bg-white text-slate-600 font-black text-lg gap-2 hover:bg-slate-50 transition-all hover:scale-105 active:scale-95"
-                >
-                  กลับสู่หน้าหลัก
-                </button>
+                <Button variant="ghost">กลับสู่หน้าหลัก</Button>
               </Link>
             </div>
           </div>
@@ -43,3 +41,4 @@ export const Route = createRootRoute({
     );
   },
 });
+
