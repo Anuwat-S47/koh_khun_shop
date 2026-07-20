@@ -14,3 +14,26 @@ export const Login = async (data: UserLoginPayload) => {
 
   return res;
 };
+
+export const LogOut = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("Supabase Error:", error);
+    throw new Error(error.message);
+  }
+};
+
+export const GetProfile = async () => {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) {
+    console.error("Supabase Error:", error);
+    throw new Error(error.message);
+  }
+
+  return user;
+};

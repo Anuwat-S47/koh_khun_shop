@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Login } from "../services/user-api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { GetProfile, Login, LogOut } from "../services/user-api";
 import { UserLoginPayload } from "../types/user-type";
 
 export function useLogin() {
@@ -9,5 +9,26 @@ export function useLogin() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
+  });
+}
+
+export function useLogOut() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: LogOut,
+    onSuccess: () => {
+      queryClient.removeQueries({
+        queryKey: ["me"],
+      });
+    },
+  });
+}
+
+export function useMe() {
+  return useQuery({
+    queryKey: ["me"],
+    queryFn: GetProfile,
+    staleTime: 1000 * 60 * 5,
   });
 }

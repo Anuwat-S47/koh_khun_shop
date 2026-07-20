@@ -1,9 +1,10 @@
-import Navbar from "@/components/Navbar";
+import CustomNavbar from "@/components/CustomNavbar";
 import { Button } from "@/components/ui/button";
+import AuthProvider from "@/features/auth/components/AuthProvider";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
-  component: Navbar,
+  component: RootLayout,
   notFoundComponent: () => {
     return (
       <div className="min-h-dvh w-full flex flex-col items-center justify-center p-6 bg-slate-50/50">
@@ -42,3 +43,11 @@ export const Route = createRootRoute({
   },
 });
 
+function RootLayout() {
+  return (
+    <AuthProvider>
+      <CustomNavbar />
+      <Outlet />
+    </AuthProvider>
+  );
+}
