@@ -1,16 +1,44 @@
-# React + Vite
+# Koh Khun Shop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+โปรเจคนี้เป็นแอปเว็บร้านอาหาร/ร้านค้าขนาดเล็กที่พัฒนาด้วยเทคโนโลยีหลักดังนี้:
 
-Currently, two official plugins are available:
+- React 19
+- Vite
+- TypeScript
+- Tailwind CSS 4
+- Supabase (`@supabase/supabase-js`) สำหรับเชื่อมต่อฐานข้อมูลและระบบ Authentication
+- @tanstack/react-router สำหรับจัดการ route
+- @tanstack/react-query สำหรับ data fetching และ caching
+- @tanstack/react-form สำหรับฟอร์ม
+- Zod สำหรับ validation schema
+- shadcn/ui และ Base UI สำหรับส่วนประกอบ UI
+- SweetAlert2 สำหรับแจ้งเตือนแบบสวยงาม
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## วิธีใช้งาน
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## โครงสร้างโปรเจคหลัก
 
-## Expanding the ESLint configuration
+- `src/main.tsx` — entry point ของแอป
+- `src/App.tsx` — คอมโพเนนต์หลักของแอป
+- `src/routes/` — Route tree ของแอป และหน้าต่าง ๆ
+- `src/components/` — คอมโพเนนต์ UI และ layout ที่นำกลับมาใช้ซ้ำได้
+- `src/features/` — โมดูลตามฟีเจอร์ เช่น auth, bill, cart, food-type, product, shop, shop-table
+- `src/utils/` — โค้ดยูทิลิตี้ เช่น การตั้งค่า Supabase
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### รายละเอียดโครงสร้าง
+
+- `src/routes/__root.tsx` — root route ของแอป พร้อม layout หลัก
+- `src/routes/_auth/login.tsx` — หน้า login
+- `src/routes/_protected/` — หน้าในส่วนของผู้ใช้ที่ล็อกอินแล้ว เช่น bill, cart, product, shop, shop-table
+- `src/features/auth/` — logic และคอมโพเนนต์สำหรับ Authentication
+- `src/features/*/hooks/` — Hook เฉพาะฟีเจอร์
+- `src/features/*/service/` — การเรียก API และ service layer
+
+## การพัฒนาเพิ่มเติม
+
+โปรเจคนี้ออกแบบมาให้เป็น local-first React app ที่เชื่อมต่อกับ Supabase และจัดการ state ด้วย React Query พร้อมระบบ route ที่แยกตามฟีเจอร์ ทำให้ผู้พัฒนาสามารถขยายต่อได้ง่าย
