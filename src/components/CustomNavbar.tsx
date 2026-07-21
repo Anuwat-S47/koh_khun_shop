@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 import { useLogOut, useMe } from "@/features/auth/hooks/userUser";
 import { Skeleton } from "./ui/skeleton";
@@ -11,6 +11,8 @@ import {
   MenubarTrigger,
 } from "./ui/menubar";
 import Swal from "sweetalert2";
+import { SidebarTrigger } from "./ui/sidebar";
+import { Separator } from "./ui/separator";
 
 function CustomNavbar() {
   const navigate = useNavigate();
@@ -34,15 +36,20 @@ function CustomNavbar() {
   const { data: user, isLoading } = useMe();
 
   return (
-    <div>
-      <header className="flex justify-between mx-10 my-5">
-        <div>
-          <Link to="/">Logo</Link>
-        </div>
+    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b bg-background px-4">
+      <div className="flex items-center gap-2">
+        <SidebarTrigger />
+
+        <Separator orientation="vertical" className="h-4" />
+
+        <span className="font-semibold">Koh Khun Shop</span>
+      </div>
+
+      <div className="flex items-center gap-4">
         {isLoading ? (
           <Skeleton className="h-8 w-24" />
         ) : user ? (
-          <>
+          <div>
             <Menubar>
               <MenubarMenu>
                 <MenubarTrigger>{user.email}</MenubarTrigger>
@@ -55,7 +62,7 @@ function CustomNavbar() {
                 </MenubarContent>
               </MenubarMenu>
             </Menubar>
-          </>
+          </div>
         ) : (
           <div>
             <Link to="/login">
@@ -63,8 +70,8 @@ function CustomNavbar() {
             </Link>
           </div>
         )}
-      </header>
-    </div>
+      </div>
+    </header>
   );
 }
 

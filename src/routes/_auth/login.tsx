@@ -44,7 +44,7 @@ function RouteComponent() {
         });
 
         navigate({
-          to: "/shop",
+          to: "/setting-shop",
         });
       } catch (error: any) {
         Swal.fire({

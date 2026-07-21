@@ -11,13 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as ProtectedShopIndexRouteImport } from './routes/_protected/shop/index'
-import { Route as ProtectedShopTableIndexRouteImport } from './routes/_protected/shop-table/index'
-import { Route as ProtectedProductIndexRouteImport } from './routes/_protected/product/index'
-import { Route as ProtectedFoodTypeIndexRouteImport } from './routes/_protected/food-type/index'
-import { Route as ProtectedCartIndexRouteImport } from './routes/_protected/cart/index'
+import { Route as ProtectedSettingShopIndexRouteImport } from './routes/_protected/setting-shop/index'
 import { Route as ProtectedBillIndexRouteImport } from './routes/_protected/bill/index'
 
 const AuthRoute = AuthRouteImport.update({
@@ -28,41 +24,22 @@ const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRoute,
 } as any)
-const ProtectedShopIndexRoute = ProtectedShopIndexRouteImport.update({
-  id: '/shop/',
-  path: '/shop/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedShopTableIndexRoute = ProtectedShopTableIndexRouteImport.update({
-  id: '/shop-table/',
-  path: '/shop-table/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedProductIndexRoute = ProtectedProductIndexRouteImport.update({
-  id: '/product/',
-  path: '/product/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedFoodTypeIndexRoute = ProtectedFoodTypeIndexRouteImport.update({
-  id: '/food-type/',
-  path: '/food-type/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedCartIndexRoute = ProtectedCartIndexRouteImport.update({
-  id: '/cart/',
-  path: '/cart/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
+const ProtectedSettingShopIndexRoute =
+  ProtectedSettingShopIndexRouteImport.update({
+    id: '/setting-shop/',
+    path: '/setting-shop/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedBillIndexRoute = ProtectedBillIndexRouteImport.update({
   id: '/bill/',
   path: '/bill/',
@@ -70,75 +47,42 @@ const ProtectedBillIndexRoute = ProtectedBillIndexRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof ProtectedIndexRoute
   '/login': typeof AuthLoginRoute
   '/bill/': typeof ProtectedBillIndexRoute
-  '/cart/': typeof ProtectedCartIndexRoute
-  '/food-type/': typeof ProtectedFoodTypeIndexRoute
-  '/product/': typeof ProtectedProductIndexRoute
-  '/shop-table/': typeof ProtectedShopTableIndexRoute
-  '/shop/': typeof ProtectedShopIndexRoute
+  '/setting-shop/': typeof ProtectedSettingShopIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof ProtectedIndexRoute
   '/login': typeof AuthLoginRoute
   '/bill': typeof ProtectedBillIndexRoute
-  '/cart': typeof ProtectedCartIndexRoute
-  '/food-type': typeof ProtectedFoodTypeIndexRoute
-  '/product': typeof ProtectedProductIndexRoute
-  '/shop-table': typeof ProtectedShopTableIndexRoute
-  '/shop': typeof ProtectedShopIndexRoute
+  '/setting-shop': typeof ProtectedSettingShopIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_auth': typeof AuthRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
+  '/_protected/': typeof ProtectedIndexRoute
   '/_protected/bill/': typeof ProtectedBillIndexRoute
-  '/_protected/cart/': typeof ProtectedCartIndexRoute
-  '/_protected/food-type/': typeof ProtectedFoodTypeIndexRoute
-  '/_protected/product/': typeof ProtectedProductIndexRoute
-  '/_protected/shop-table/': typeof ProtectedShopTableIndexRoute
-  '/_protected/shop/': typeof ProtectedShopIndexRoute
+  '/_protected/setting-shop/': typeof ProtectedSettingShopIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/bill/'
-    | '/cart/'
-    | '/food-type/'
-    | '/product/'
-    | '/shop-table/'
-    | '/shop/'
+  fullPaths: '/' | '/login' | '/bill/' | '/setting-shop/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/login'
-    | '/bill'
-    | '/cart'
-    | '/food-type'
-    | '/product'
-    | '/shop-table'
-    | '/shop'
+  to: '/' | '/login' | '/bill' | '/setting-shop'
   id:
     | '__root__'
-    | '/'
     | '/_protected'
     | '/_auth'
     | '/_auth/login'
+    | '/_protected/'
     | '/_protected/bill/'
-    | '/_protected/cart/'
-    | '/_protected/food-type/'
-    | '/_protected/product/'
-    | '/_protected/shop-table/'
-    | '/_protected/shop/'
+    | '/_protected/setting-shop/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
 }
@@ -159,12 +103,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_protected/': {
+      id: '/_protected/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ProtectedIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
     '/_auth/login': {
       id: '/_auth/login'
@@ -173,39 +117,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_protected/shop/': {
-      id: '/_protected/shop/'
-      path: '/shop'
-      fullPath: '/shop/'
-      preLoaderRoute: typeof ProtectedShopIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
-    '/_protected/shop-table/': {
-      id: '/_protected/shop-table/'
-      path: '/shop-table'
-      fullPath: '/shop-table/'
-      preLoaderRoute: typeof ProtectedShopTableIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
-    '/_protected/product/': {
-      id: '/_protected/product/'
-      path: '/product'
-      fullPath: '/product/'
-      preLoaderRoute: typeof ProtectedProductIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
-    '/_protected/food-type/': {
-      id: '/_protected/food-type/'
-      path: '/food-type'
-      fullPath: '/food-type/'
-      preLoaderRoute: typeof ProtectedFoodTypeIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
-    '/_protected/cart/': {
-      id: '/_protected/cart/'
-      path: '/cart'
-      fullPath: '/cart/'
-      preLoaderRoute: typeof ProtectedCartIndexRouteImport
+    '/_protected/setting-shop/': {
+      id: '/_protected/setting-shop/'
+      path: '/setting-shop'
+      fullPath: '/setting-shop/'
+      preLoaderRoute: typeof ProtectedSettingShopIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/bill/': {
@@ -219,21 +135,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedRouteRouteChildren {
+  ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedBillIndexRoute: typeof ProtectedBillIndexRoute
-  ProtectedCartIndexRoute: typeof ProtectedCartIndexRoute
-  ProtectedFoodTypeIndexRoute: typeof ProtectedFoodTypeIndexRoute
-  ProtectedProductIndexRoute: typeof ProtectedProductIndexRoute
-  ProtectedShopTableIndexRoute: typeof ProtectedShopTableIndexRoute
-  ProtectedShopIndexRoute: typeof ProtectedShopIndexRoute
+  ProtectedSettingShopIndexRoute: typeof ProtectedSettingShopIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedBillIndexRoute: ProtectedBillIndexRoute,
-  ProtectedCartIndexRoute: ProtectedCartIndexRoute,
-  ProtectedFoodTypeIndexRoute: ProtectedFoodTypeIndexRoute,
-  ProtectedProductIndexRoute: ProtectedProductIndexRoute,
-  ProtectedShopTableIndexRoute: ProtectedShopTableIndexRoute,
-  ProtectedShopIndexRoute: ProtectedShopIndexRoute,
+  ProtectedSettingShopIndexRoute: ProtectedSettingShopIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
@@ -251,7 +161,6 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
 }
