@@ -1,14 +1,25 @@
-import { Home, Package, Settings2 } from "lucide-react";
+import { Home, Package, Settings, Settings2, ShoppingBag, SlidersHorizontal } from "lucide-react";
 
 export const sidebarMenu = [
-    {
-        title: "Dashboard",
-        to: "/",
-        icon: Home
-    },
-    {
-        title: "setting-shop",
-        to: "/setting-shop",
-        icon: Settings2
-    }
-]
+  {
+    title: "Dashboard",
+    to: "/",
+    icon: Home,
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    children: [
+      {
+        title: "Shop Setting",
+        to: "/settings/shop",
+        icon: ShoppingBag,
+      },
+      {
+        title: "Other Settings",
+        to: "/settings/other",
+        icon: SlidersHorizontal,
+      },
+    ],
+  },
+];

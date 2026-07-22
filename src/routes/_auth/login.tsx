@@ -1,8 +1,8 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
-import { loginSchemas } from "@/features/auth/schemas/user-schemas";
+import { loginSchemas } from "@/schemas/user-schemas";
 import Swal from "sweetalert2";
-import { useLogin } from "@/features/auth/hooks/userUser";
+import { useLogin } from "@/hooks/userUser";
 
 export const Route = createFileRoute("/_auth/login")({
   component: RouteComponent,
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_auth/login")({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { mutate: login, isPending } = useLogin();
+  const { mutateAsync: login, isPending } = useLogin();
 
   const form = useForm({
     defaultValues: {
@@ -34,17 +34,17 @@ function RouteComponent() {
       }
 
       try {
-        await login(result.data);
+        const resultLogin = await login(result.data);
 
         await Swal.fire({
           icon: "success",
-          title: "Login สำเร็จ",
+          title: resultLogin.message,
           timer: 1500,
           showConfirmButton: false,
         });
 
         navigate({
-          to: "/setting-shop",
+          to: "/",
         });
       } catch (error: any) {
         Swal.fire({

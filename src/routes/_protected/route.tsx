@@ -1,15 +1,17 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { supabase } from "@/utils/supabase";
 import CustomNavbar from "@/components/CustomNavbar";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import CustomSidebar from "@/components/CustomSidebar";
+import { GetMe } from "@/services/user-api";
+import { queryClient } from "@/lib/query-client";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+   const user = await queryClient.ensureQueryData({
+    queryKey: ["me"],
+    queryFn: GetMe,
+  });
 
     if (!user) {
       throw redirect({

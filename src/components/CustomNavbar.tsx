@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "./ui/button";
-import { useLogOut, useMe } from "@/features/auth/hooks/userUser";
+import { useLogOut, useMe } from "@/hooks/userUser";
 import { Skeleton } from "./ui/skeleton";
 import {
   Menubar,
