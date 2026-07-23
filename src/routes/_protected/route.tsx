@@ -8,12 +8,16 @@ import { queryClient } from "@/lib/query-client";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async () => {
-   const user = await queryClient.ensureQueryData({
-    queryKey: ["me"],
-    queryFn: GetMe,
-  });
+    try {
+      const user = await queryClient.ensureQueryData({
+        queryKey: ["me"],
+        queryFn: GetMe,
+      });
 
-    if (!user) {
+      return {
+        user,
+      };
+    } catch (error) {
       throw redirect({
         to: "/login",
       });

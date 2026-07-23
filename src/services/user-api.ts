@@ -12,7 +12,7 @@ export const Login = async (data: UserLoginPayload) => {
     throw new Error(error.message);
   }
 
-  return {message: "Login สำเร็จ"};
+  return { message: "Login สำเร็จ"};
 };
 
 export const LogOut = async () => {

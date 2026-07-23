@@ -21,11 +21,21 @@ export const UploadShopImg = async (img: File) => {
 };
 
 export const CreateShop = async (data: CreateShopPayload) => {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw new Error("User not authenticated");
+  }
+
   const { error } = await supabase.from("shop").insert({
     name: data.name,
     logo_url: data.logoUrl,
     address: data.address,
     phone: data.phone,
+    create_by: user?.id,
   });
 
   if (error) {
@@ -33,7 +43,7 @@ export const CreateShop = async (data: CreateShopPayload) => {
     throw new Error(error.message);
   }
 
-  return { success: true };
+  return { message: "เพิ่มร้านสำเร็จ" };
 };
 
 export const GetShop = async () => {
@@ -44,10 +54,10 @@ export const GetShop = async () => {
       ascending: false,
     });
 
-    if (error) {
+  if (error) {
     console.error("Supabase Error:", error);
     throw new Error(error.message);
   }
 
-  return data
+  return data;
 };

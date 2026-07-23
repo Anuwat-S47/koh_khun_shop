@@ -25,7 +25,7 @@ import { sidebarMenu } from "@/constants/menu";
 
 const CustomSidebar = () => {
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>

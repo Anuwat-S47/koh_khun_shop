@@ -6,13 +6,12 @@ import { CreateShopWithImgPayload } from "../types/shop_type";
 export function useCreateShop() {
   return useMutation({
     mutationFn: async (data: CreateShopWithImgPayload) => {
-      const logoUrl = await UploadShopImg(data.img);
+      const logoUrl = await UploadShopImg(data.logoUrl);
 
       return await CreateShop({
         name: data.name,
         address: data.address,
         phone: data.phone,
-        createBy: data.createBy,
         logoUrl,
       });
     },
