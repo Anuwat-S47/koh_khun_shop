@@ -9,7 +9,6 @@ export const Route = createFileRoute("/_protected/settings/shop/")({
 
 function RouteComponent() {
   const { data: shop, isLoading } = useGetShop();
-  console.log(shop);
 
   if (isLoading) return <Skeleton />;
 
