@@ -15,7 +15,10 @@ import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as ProtectedBillIndexRouteImport } from './routes/_protected/bill/index'
 import { Route as ProtectedSettingsShopIndexRouteImport } from './routes/_protected/settings/shop/index'
+import { Route as ProtectedSettingsOtherIndexRouteImport } from './routes/_protected/settings/other/index'
 import { Route as ProtectedSettingsShopAddShopRouteImport } from './routes/_protected/settings/shop/add-shop'
+import { Route as ProtectedSettingsShopShopIdIndexRouteImport } from './routes/_protected/settings/shop/$shopId/index'
+import { Route as ProtectedSettingsShopShopIdEditShopRouteImport } from './routes/_protected/settings/shop/$shopId/edit-shop'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -46,10 +49,28 @@ const ProtectedSettingsShopIndexRoute =
     path: '/settings/shop/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedSettingsOtherIndexRoute =
+  ProtectedSettingsOtherIndexRouteImport.update({
+    id: '/settings/other/',
+    path: '/settings/other/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedSettingsShopAddShopRoute =
   ProtectedSettingsShopAddShopRouteImport.update({
     id: '/settings/shop/add-shop',
     path: '/settings/shop/add-shop',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedSettingsShopShopIdIndexRoute =
+  ProtectedSettingsShopShopIdIndexRouteImport.update({
+    id: '/settings/shop/$shopId/',
+    path: '/settings/shop/$shopId/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedSettingsShopShopIdEditShopRoute =
+  ProtectedSettingsShopShopIdEditShopRouteImport.update({
+    id: '/settings/shop/$shopId/edit-shop',
+    path: '/settings/shop/$shopId/edit-shop',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 
@@ -58,14 +79,20 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/bill/': typeof ProtectedBillIndexRoute
   '/settings/shop/add-shop': typeof ProtectedSettingsShopAddShopRoute
+  '/settings/other/': typeof ProtectedSettingsOtherIndexRoute
   '/settings/shop/': typeof ProtectedSettingsShopIndexRoute
+  '/settings/shop/$shopId/edit-shop': typeof ProtectedSettingsShopShopIdEditShopRoute
+  '/settings/shop/$shopId/': typeof ProtectedSettingsShopShopIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof ProtectedIndexRoute
   '/login': typeof AuthLoginRoute
   '/bill': typeof ProtectedBillIndexRoute
   '/settings/shop/add-shop': typeof ProtectedSettingsShopAddShopRoute
+  '/settings/other': typeof ProtectedSettingsOtherIndexRoute
   '/settings/shop': typeof ProtectedSettingsShopIndexRoute
+  '/settings/shop/$shopId/edit-shop': typeof ProtectedSettingsShopShopIdEditShopRoute
+  '/settings/shop/$shopId': typeof ProtectedSettingsShopShopIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -75,14 +102,32 @@ export interface FileRoutesById {
   '/_protected/': typeof ProtectedIndexRoute
   '/_protected/bill/': typeof ProtectedBillIndexRoute
   '/_protected/settings/shop/add-shop': typeof ProtectedSettingsShopAddShopRoute
+  '/_protected/settings/other/': typeof ProtectedSettingsOtherIndexRoute
   '/_protected/settings/shop/': typeof ProtectedSettingsShopIndexRoute
+  '/_protected/settings/shop/$shopId/edit-shop': typeof ProtectedSettingsShopShopIdEditShopRoute
+  '/_protected/settings/shop/$shopId/': typeof ProtectedSettingsShopShopIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/login' | '/bill/' | '/settings/shop/add-shop' | '/settings/shop/'
+    | '/'
+    | '/login'
+    | '/bill/'
+    | '/settings/shop/add-shop'
+    | '/settings/other/'
+    | '/settings/shop/'
+    | '/settings/shop/$shopId/edit-shop'
+    | '/settings/shop/$shopId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/bill' | '/settings/shop/add-shop' | '/settings/shop'
+  to:
+    | '/'
+    | '/login'
+    | '/bill'
+    | '/settings/shop/add-shop'
+    | '/settings/other'
+    | '/settings/shop'
+    | '/settings/shop/$shopId/edit-shop'
+    | '/settings/shop/$shopId'
   id:
     | '__root__'
     | '/_protected'
@@ -91,7 +136,10 @@ export interface FileRouteTypes {
     | '/_protected/'
     | '/_protected/bill/'
     | '/_protected/settings/shop/add-shop'
+    | '/_protected/settings/other/'
     | '/_protected/settings/shop/'
+    | '/_protected/settings/shop/$shopId/edit-shop'
+    | '/_protected/settings/shop/$shopId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,11 +191,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedSettingsShopIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/settings/other/': {
+      id: '/_protected/settings/other/'
+      path: '/settings/other'
+      fullPath: '/settings/other/'
+      preLoaderRoute: typeof ProtectedSettingsOtherIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/settings/shop/add-shop': {
       id: '/_protected/settings/shop/add-shop'
       path: '/settings/shop/add-shop'
       fullPath: '/settings/shop/add-shop'
       preLoaderRoute: typeof ProtectedSettingsShopAddShopRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/settings/shop/$shopId/': {
+      id: '/_protected/settings/shop/$shopId/'
+      path: '/settings/shop/$shopId'
+      fullPath: '/settings/shop/$shopId/'
+      preLoaderRoute: typeof ProtectedSettingsShopShopIdIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/settings/shop/$shopId/edit-shop': {
+      id: '/_protected/settings/shop/$shopId/edit-shop'
+      path: '/settings/shop/$shopId/edit-shop'
+      fullPath: '/settings/shop/$shopId/edit-shop'
+      preLoaderRoute: typeof ProtectedSettingsShopShopIdEditShopRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
   }
@@ -157,14 +226,21 @@ interface ProtectedRouteRouteChildren {
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedBillIndexRoute: typeof ProtectedBillIndexRoute
   ProtectedSettingsShopAddShopRoute: typeof ProtectedSettingsShopAddShopRoute
+  ProtectedSettingsOtherIndexRoute: typeof ProtectedSettingsOtherIndexRoute
   ProtectedSettingsShopIndexRoute: typeof ProtectedSettingsShopIndexRoute
+  ProtectedSettingsShopShopIdEditShopRoute: typeof ProtectedSettingsShopShopIdEditShopRoute
+  ProtectedSettingsShopShopIdIndexRoute: typeof ProtectedSettingsShopShopIdIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedBillIndexRoute: ProtectedBillIndexRoute,
   ProtectedSettingsShopAddShopRoute: ProtectedSettingsShopAddShopRoute,
+  ProtectedSettingsOtherIndexRoute: ProtectedSettingsOtherIndexRoute,
   ProtectedSettingsShopIndexRoute: ProtectedSettingsShopIndexRoute,
+  ProtectedSettingsShopShopIdEditShopRoute:
+    ProtectedSettingsShopShopIdEditShopRoute,
+  ProtectedSettingsShopShopIdIndexRoute: ProtectedSettingsShopShopIdIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

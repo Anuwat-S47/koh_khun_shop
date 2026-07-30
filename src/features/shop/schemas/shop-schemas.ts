@@ -1,6 +1,6 @@
-import z from "zod";
+import { z } from "zod";
 
-export const shopSchemas = z.object({
+const baseShopSchema = z.object({
   name: z
     .string()
     .min(1, "กรุณากรอกชื่อร้าน")
@@ -12,20 +12,25 @@ export const shopSchemas = z.object({
     .string()
     .min(1, "กรุณากรอกเบอร์โทรศัพท์")
     .regex(/^[0-9]{9,10}$/, "เบอร์โทรศัพท์ต้องเป็นตัวเลข 9-10 หลัก"),
-
-  logoUrl: z
-    .instanceof(File, {
-      message: "กรุณาเลือกรูปโลโก้",
-    })
-    .refine(
-      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      "รองรับเฉพาะ JPG, PNG และ WebP",
-    )
-    .refine(
-      (file) => file.size <= 5 * 1024 * 1024,
-      "รูปภาพต้องมีขนาดไม่เกิน 5MB",
-    ),
-
 });
 
-export type CteateShopFprm = z.infer<typeof shopSchemas>;
+const logoFileSchema = z
+  .instanceof(File, {
+    message: "กรุณาเลือกรูปโลโก้",
+  })
+  .refine(
+    (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+    "รองรับเฉพาะ JPG, PNG และ WebP",
+  )
+  .refine(
+    (file) => file.size <= 5 * 1024 * 1024,
+    "รูปภาพต้องมีขนาดไม่เกิน 5MB",
+  );
+
+export const createShopSchema = baseShopSchema.extend({
+  logoUrl: logoFileSchema,
+});
+
+export const updateShopSchema = baseShopSchema.extend({
+  logoUrl: logoFileSchema.nullable(),
+});

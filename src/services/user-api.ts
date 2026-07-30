@@ -12,11 +12,13 @@ export const Login = async (data: UserLoginPayload) => {
     throw new Error(error.message);
   }
 
-  return { message: "Login สำเร็จ"};
+  return { message: "Login สำเร็จ" };
 };
 
 export const LogOut = async () => {
-  const { error } = await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut({
+    scope: "local",
+  });
 
   if (error) {
     console.error("Supabase Error:", error);
