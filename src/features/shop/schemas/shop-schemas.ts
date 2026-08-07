@@ -1,13 +1,13 @@
 import { z } from "zod";
 
+const multiLangSchema = z.object({
+  th: z.string().min(1, "กรุณากรอกภาษาไทย"),
+  la: z.string(),
+});
+
 const baseShopSchema = z.object({
-  name: z
-    .string()
-    .min(1, "กรุณากรอกชื่อร้าน")
-    .max(100, "ชื่อร้านต้องไม่เกิน 100 ตัวอักษร"),
-
-  address: z.string().min(1, "กรุณากรอกที่อยู่ร้าน"),
-
+  name: multiLangSchema,
+  address: multiLangSchema,
   phone: z
     .string()
     .min(1, "กรุณากรอกเบอร์โทรศัพท์")

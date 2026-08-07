@@ -3,6 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetShop } from "@/features/shop/hooks/useShop";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { SquarePen, Store } from "lucide-react";
+import { getLangText } from "@/utils/lang";
 
 export const Route = createFileRoute("/_protected/settings/shop/")({
   staticData: {

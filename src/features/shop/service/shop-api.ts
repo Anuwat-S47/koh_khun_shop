@@ -71,9 +71,15 @@ export const CreateShop = async (data: CreateShopPayload) => {
   }
 
   const { error } = await supabase.from("shop").insert({
-    name: data.name,
+    name: {
+      th: data.name.th,
+      la: data.name.la || data.name.th,
+    },
     logo_url: data.logoUrl,
-    address: data.address,
+    address: {
+      th: data.address.th,
+      la: data.name.la || data.name.th,
+    },
     phone: data.phone,
     create_by: user.id,
   });
@@ -92,9 +98,15 @@ export const UpdateShop = async (id: number, data: UpdateShopPayload) => {
   const { error } = await supabase
     .from("shop")
     .update({
-      name: data.name,
-      logo_url: data.logoUrl,
-      address: data.address,
+    name: {
+      th: data.name.th,
+      la: data.name.la || data.name.th,
+    },
+    logo_url: data.logoUrl,
+    address: {
+      th: data.address.th,
+      la: data.name.la || data.name.th,
+    },
       phone: data.phone,
     })
     .eq("id", id);

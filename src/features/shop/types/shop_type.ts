@@ -1,7 +1,12 @@
+export interface MultiLangField {
+  th: string;
+  la: string;
+}
+
 export type CreateShopPayload = {
-  name: string;
+  name: MultiLangField;
   logoUrl: string;
-  address: string;
+  address: MultiLangField;
   phone: string;
 };
 
@@ -11,9 +16,9 @@ export type CreateShopWithImgPayload = Omit<CreateShopPayload, "logoUrl"> & {
 
 export type ShopType = {
   id: number;
-  name: string;
+  name: MultiLangField;
   logoUrl: string;
-  address: string;
+  address: MultiLangField;
   phone: string;
   createdAt: string;
   createBy: string;
@@ -21,16 +26,16 @@ export type ShopType = {
 
 export interface UpdateShopPayload {
   id: number;
-  name: string;
-  address: string;
+  name: MultiLangField;
+  address: MultiLangField;
   phone: string;
   logoUrl?: string;
 }
 
 export type UpdateShopWithImgPayload = {
   id: number;
-  name: string;
-  address: string;
+  name: MultiLangField;
+  address: MultiLangField;
   phone: string;
   logoUrl: File | null;
 };

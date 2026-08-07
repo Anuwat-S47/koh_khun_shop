@@ -34,9 +34,15 @@ function RouteComponent() {
 
   const form = useForm({
     defaultValues: {
-      name: "",
+      name: {
+        th: "",
+        la: "",
+      },
       logoUrl: undefined as File | undefined,
-      address: "",
+      address: {
+        th: "",
+        la: "",
+      },
       phone: "",
     },
     validators: {
@@ -49,9 +55,15 @@ function RouteComponent() {
 
       try {
         const resData = await createShop({
-          name: value.name,
+          name: {
+            th: value.name.th,
+            la: value.name.la,
+          },
           logoUrl: value.logoUrl,
-          address: value.address,
+          address: {
+            th: value.address.th,
+            la: value.address.la,
+          },
           phone: value.phone,
         });
 
@@ -124,48 +136,103 @@ function RouteComponent() {
               )}
             </form.Field>
 
-            <form.Field name="name">
-              {(field) => (
-                <FormField field={field}>
-                  {(hasError) => (
-                    <>
-                      <FieldLabel htmlFor={field.name}>ชื่อร้าน</FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="text"
-                        placeholder="เช่น ร้านส้มตำ, ก๋วยเตี๋ยว, อื่นๆ"
-                        value={field.state.value}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        aria-invalid={hasError}
-                      />
-                    </>
-                  )}
-                </FormField>
-              )}
-            </form.Field>
-
-            <form.Field name="address">
-              {(field) => (
-                <FormField field={field}>
-                  {(hasError) => (
-                    <>
-                      <FieldLabel htmlFor={field.name}>ที่อยู่ร้าน</FieldLabel>
-                      <InputGroup>
-                        <InputGroupTextarea
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <form.Field name="name.th">
+                {(field) => (
+                  <FormField field={field}>
+                    {(hasError) => (
+                      <>
+                        <FieldLabel htmlFor={field.name}>
+                          ชื่อร้าน (ไทย)
+                        </FieldLabel>
+                        <Input
                           id={field.name}
                           name={field.name}
-                          placeholder="เช่น 123 หมู่ 4 ต.บ้านใหม่ อ.เมือง จ.สกลนคร"
+                          type="text"
+                          placeholder="เช่น: ร้านส้มตํา, ก๋วยเตี๋ยว"
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={hasError}
                         />
-                      </InputGroup>
-                    </>
-                  )}
-                </FormField>
-              )}
-            </form.Field>
+                      </>
+                    )}
+                  </FormField>
+                )}
+              </form.Field>
+
+              <form.Field name="name.la">
+                {(field) => (
+                  <FormField field={field}>
+                    {(hasError) => (
+                      <>
+                        <FieldLabel htmlFor={field.name}>
+                          ชื่อร้าน (ພາສາລາວ)
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          type="text"
+                          placeholder="ເຊັ່ນ: ร้านส้มตํา, ก๋วยเตี๋ยว"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={hasError}
+                        />
+                      </>
+                    )}
+                  </FormField>
+                )}
+              </form.Field>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <form.Field name="address.th">
+                {(field) => (
+                  <FormField field={field}>
+                    {(hasError) => (
+                      <>
+                        <FieldLabel htmlFor={field.name}>
+                          ที่อยู่ร้าน (ไทย)
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupTextarea
+                            id={field.name}
+                            name={field.name}
+                            placeholder="เช่น 123 หมู่ 4 ต.บ้านใหม่"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={hasError}
+                          />
+                        </InputGroup>
+                      </>
+                    )}
+                  </FormField>
+                )}
+              </form.Field>
+
+              <form.Field name="address.la">
+                {(field) => (
+                  <FormField field={field}>
+                    {(hasError) => (
+                      <>
+                        <FieldLabel htmlFor={field.name}>
+                          ที่อยู่ร้าน (ພາສາລາວ)
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupTextarea
+                            id={field.name}
+                            name={field.name}
+                            placeholder="ເຊັ່ນ: 123 ໝູ່ 4, ບ້ານ ໃໝ່"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={hasError}
+                          />
+                        </InputGroup>
+                      </>
+                    )}
+                  </FormField>
+                )}
+              </form.Field>
+            </div>
 
             <form.Field name="phone">
               {(field) => (
