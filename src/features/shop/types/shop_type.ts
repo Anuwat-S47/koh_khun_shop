@@ -1,6 +1,6 @@
 export interface MultiLangField {
   th: string;
-  la: string;
+  lo: string;
 }
 
 export type CreateShopPayload = {

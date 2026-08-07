@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const multiLangSchema = z.object({
   th: z.string().min(1, "กรุณากรอกภาษาไทย"),
-  la: z.string(),
+  lo: z.string(),
 });
 
 const baseShopSchema = z.object({

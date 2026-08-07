@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
-import { loginSchemas } from "@/schemas/user-schemas";
+import { loginSchemas } from "@/features/auth/schemas/user-schemas";
 import Swal from "sweetalert2";
-import { useLogin } from "@/hooks/userUser";
+import { useLogin } from "@/features/auth/hooks/userUser";
 import { Button } from "@/components/ui/button";
 import {
   InputGroup,
@@ -14,14 +14,13 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import {
-  Field,
-  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
 import FormField from "@/components/FormField";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 
 export const Route = createFileRoute("/_auth/login")({
   component: RouteComponent,
@@ -32,21 +31,23 @@ function RouteComponent() {
   const { mutateAsync: login, isPending } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
 
+  const { t } = useTranslation();
+
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
     validators: {
-      onSubmit: loginSchemas,
+      onSubmit: loginSchemas(t),
     },
     onSubmit: async ({ value }) => {
       try {
-        const resultLogin = await login(value);
+        await login(value);
 
         await Swal.fire({
           icon: "success",
-          title: resultLogin.message,
+          title: t("auth.loginSuccess"),
           timer: 1500,
           showConfirmButton: false,
         });
@@ -57,9 +58,9 @@ function RouteComponent() {
       } catch (error: any) {
         Swal.fire({
           icon: "error",
-          title: "Login ไม่สำเร็จ",
+          title: t("auth.loginFailed"),
           text:
-            error.response?.data?.message ?? "Email หรือ Password ไม่ถูกต้อง",
+            error.response?.data?.message ?? t("auth.invalidCredentials"),
         });
       }
     },
@@ -76,7 +77,7 @@ function RouteComponent() {
         >
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>Login Page</FieldLegend>
+              <FieldLegend>{t("auth.login")}</FieldLegend>
 
               <FieldGroup>
                 <form.Field name="email">
@@ -84,7 +85,7 @@ function RouteComponent() {
                     <FormField field={field}>
                       {(hasError) => (
                         <>
-                          <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                          <FieldLabel htmlFor={field.name}>{t("auth.email")}</FieldLabel>
                           <Input
                             id={field.name}
                             name={field.name}
@@ -105,7 +106,7 @@ function RouteComponent() {
                     <FormField field={field}>
                       {(hasError) => (
                         <>
-                          <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                          <FieldLabel htmlFor={field.name}>{t("auth.password")}</FieldLabel>
                           <InputGroup>
                             <InputGroupInput
                               id={field.name}
@@ -141,7 +142,7 @@ function RouteComponent() {
               <form.Subscribe selector={(state) => state.canSubmit}>
                 {(canSubmit) => (
                   <Button type="submit" disabled={!canSubmit || isPending}>
-                    {isPending ? "Loading..." : "Login"}
+                    {isPending ? t("common.loading") : t("auth.login")}
                   </Button>
                 )}
               </form.Subscribe>

@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 
 export const Route = createFileRoute("/_protected/settings/shop/add-shop")({
   staticData: {
-    title: "เพิ่มร้านค้า",
+    title:  "shop.addShop",
     showBackButton: true,
     className: "w-full max-w-2xl border-2 p-4 rounded-2xl",
   },
@@ -36,12 +36,12 @@ function RouteComponent() {
     defaultValues: {
       name: {
         th: "",
-        la: "",
+        lo: "",
       },
       logoUrl: undefined as File | undefined,
       address: {
         th: "",
-        la: "",
+        lo: "",
       },
       phone: "",
     },
@@ -57,12 +57,12 @@ function RouteComponent() {
         const resData = await createShop({
           name: {
             th: value.name.th,
-            la: value.name.la,
+            lo: value.name.lo,
           },
           logoUrl: value.logoUrl,
           address: {
             th: value.address.th,
-            la: value.address.la,
+            lo: value.address.lo,
           },
           phone: value.phone,
         });
@@ -160,7 +160,7 @@ function RouteComponent() {
                 )}
               </form.Field>
 
-              <form.Field name="name.la">
+              <form.Field name="name.lo">
                 {(field) => (
                   <FormField field={field}>
                     {(hasError) => (
@@ -209,7 +209,7 @@ function RouteComponent() {
                 )}
               </form.Field>
 
-              <form.Field name="address.la">
+              <form.Field name="address.lo">
                 {(field) => (
                   <FormField field={field}>
                     {(hasError) => (

@@ -1,18 +1,21 @@
-import { supabase } from "../lib/supabase";
-import { UserLoginPayload } from "../features/types/user-type";
+import { supabase } from "@/lib/supabase";
+import { UserLoginPayload } from "../types/user-type";
 
 export const Login = async (data: UserLoginPayload) => {
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data: result, error } = await supabase.auth.signInWithPassword({
     email: data.email,
     password: data.password,
   });
 
   if (error) {
     console.error("Supabase Error:", error);
+
     throw new Error(error.message);
   }
 
-  return { message: "Login สำเร็จ" };
+  return {
+    user: result.user,
+  };
 };
 
 export const LogOut = async () => {

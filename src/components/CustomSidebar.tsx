@@ -20,15 +20,18 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
 } from "@/components/ui/sidebar";
-import { sidebarMenu } from "@/constants/menu";
 
+import { sidebarMenu } from "@/constants/menu";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 
 const CustomSidebar = () => {
+  const { t } = useTranslation();
+
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupLabel>{t.sidebar.menu}</SidebarGroupLabel>
 
           <SidebarGroupContent>
             <SidebarMenuItems />
@@ -38,26 +41,24 @@ const CustomSidebar = () => {
     </Sidebar>
   );
 };
+
 export default CustomSidebar;
 
 function SidebarMenuItems() {
+  const { t } = useTranslation();
+
   return (
     <SidebarMenu>
       {sidebarMenu.map((item) => {
-        if (item.children) {
+        if ("children" in item) {
           return (
-            <Collapsible
-              key={item.title}
-              defaultOpen
-              className="group/collapsible"
-            >
+            <Collapsible key={item.title} defaultOpen className="group/collapsible">
               <SidebarMenuItem>
                 <CollapsibleTrigger
                   render={
                     <SidebarMenuButton>
                       {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-
+                      <span>{t.sidebar[item.title]}</span>
                       <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   }
@@ -71,7 +72,8 @@ function SidebarMenuItems() {
                           render={
                             <Link to={child.to}>
                               {child.icon && <child.icon />}
-                              <span>{child.title}</span>
+
+                              <span>{t.sidebar[child.title]}</span>
                             </Link>
                           }
                         />
@@ -83,13 +85,15 @@ function SidebarMenuItems() {
             </Collapsible>
           );
         }
+
         return (
           <SidebarMenuItem key={item.to}>
             <SidebarMenuButton
               render={
                 <Link to={item.to}>
                   {item.icon && <item.icon />}
-                  <span>{item.title}</span>
+
+                  <span>{t.sidebar[item.title]}</span>
                 </Link>
               }
             />

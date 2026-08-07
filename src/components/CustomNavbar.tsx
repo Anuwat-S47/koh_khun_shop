@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "./ui/button";
-import { useLogOut, useMe } from "@/hooks/userUser";
+import { useLogOut, useMe } from "@/features/auth/hooks/userUser";
 import { Skeleton } from "./ui/skeleton";
 import {
   Menubar,
@@ -8,67 +8,118 @@ import {
   MenubarGroup,
   MenubarItem,
   MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
   MenubarTrigger,
 } from "./ui/menubar";
 import Swal from "sweetalert2";
 import { SidebarTrigger } from "./ui/sidebar";
 import { Separator } from "./ui/separator";
+import { useLanguageStore } from "@/features/translations/stores/language-store";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 
 function CustomNavbar() {
   const navigate = useNavigate();
-  const { mutate: logout, isPending } = useLogOut();
-  const handlogout = async () => {
+
+  const { mutateAsync: logout, isPending } = useLogOut();
+  const { data: user, isLoading } = useMe();
+
+  const language = useLanguageStore((state) => state.language);
+  const setLanguage = useLanguageStore((state) => state.setLanguage);
+
+  const { t } = useTranslation();
+
+  const handleLogout = async () => {
     const res = await Swal.fire({
-      title: "ออกจากระบบ?",
+      title: t.auth.logoutConfirm,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Logout",
-      cancelButtonText: "Cancel",
+      confirmButtonText: t.auth.logout,
+      cancelButtonText: t.common.cancel,
     });
 
     if (!res.isConfirmed) return;
 
     await logout();
+
     navigate({
       to: "/login",
     });
   };
-  const { data: user, isLoading } = useMe();
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b bg-background px-4">
+    <header className="flex h-14 items-center justify-between border-b px-4">
       <div className="flex items-center gap-2">
         <SidebarTrigger />
 
         <Separator orientation="vertical" className="h-4" />
 
-        <span className="font-semibold">Koh Khun Shop</span>
+        <span className="font-semibold">
+          Koh Khun Shop
+        </span>
       </div>
 
       <div className="flex items-center gap-4">
         {isLoading ? (
           <Skeleton className="h-8 w-24" />
         ) : user ? (
-          <div>
-            <Menubar>
-              <MenubarMenu>
-                <MenubarTrigger>{user.email}</MenubarTrigger>
-                <MenubarContent>
-                  <MenubarGroup>
-                    <MenubarItem disabled={isPending} onClick={handlogout}>
-                      {!isPending ? "LogOut" : "Loding..."}
-                    </MenubarItem>
-                  </MenubarGroup>
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
-          </div>
+          <Menubar>
+            <MenubarMenu>
+              <MenubarTrigger>
+                {user.email}
+              </MenubarTrigger>
+
+              <MenubarContent align="end">
+                <MenubarGroup>
+                  {/* Language */}
+                  <MenubarSub>
+                    <MenubarSubTrigger>
+                      {t.language.title}
+                    </MenubarSubTrigger>
+
+                    <MenubarSubContent>
+                      <MenubarRadioGroup
+                        value={language}
+                        onValueChange={(value) =>
+                          setLanguage(value as "th" | "lo")
+                        }
+                      >
+                        <MenubarRadioItem value="th">
+                          🇹🇭 ไทย
+                        </MenubarRadioItem>
+
+                        <MenubarRadioItem value="lo">
+                          🇱🇦 ລາວ
+                        </MenubarRadioItem>
+                      </MenubarRadioGroup>
+                    </MenubarSubContent>
+                  </MenubarSub>
+
+                  <MenubarSeparator />
+
+                  {/* Logout */}
+                  <MenubarItem
+                    disabled={isPending}
+                    onClick={handleLogout}
+                  >
+                    {isPending
+                      ? t.common.loading
+                      : t.auth.logout}
+                  </MenubarItem>
+                </MenubarGroup>
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
         ) : (
-          <div>
-            <Link to="/login">
-              <Button variant="ghost">Login</Button>
-            </Link>
-          </div>
+          <Link to="/login">
+            <Button variant="ghost">
+              {t.auth.login}
+            </Button>
+          </Link>
         )}
       </div>
     </header>
