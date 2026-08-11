@@ -6,7 +6,7 @@ export const Route = createFileRoute(
   "/_protected/settings/shop/$shopId/edit-shop",
 )({
   staticData: {
-    title: "แก้ไขข้อมูลร้านค้า",
+    title: "shop.editShop",
     showBackButton: true,
     className: "w-full max-w-2xl border-2 p-4 rounded-2xl",
   },

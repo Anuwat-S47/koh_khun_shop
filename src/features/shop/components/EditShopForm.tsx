@@ -12,6 +12,7 @@ import { ShopType } from "../types/shop_type";
 import { updateShopSchema } from "../schemas/shop-schemas";
 import { useUpdateShop } from "../hooks/useShop";
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 
 interface Props {
   shop: ShopType;
@@ -21,27 +22,36 @@ export default function EditShopForm({ shop }: Props) {
   const { mutateAsync: updateShop, isPending } = useUpdateShop();
   const navigate = useNavigate();
   const [previewUrl, setPreviewUrl] = useState<string | null>(shop.logoUrl);
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl?.startsWith("blob:")) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const form = useForm({
     defaultValues: {
-      name: shop.name,
+      name: { th: shop.name.th, lo: shop.name.lo },
       logoUrl: null as File | null,
-      address: shop.address,
+      address: { th: shop.address.th, lo: shop.address.lo },
       phone: shop.phone,
     },
 
     validators: {
-      onSubmit: updateShopSchema,
+      onSubmit: updateShopSchema(t),
     },
 
     onSubmit: async ({ value }) => {
       try {
-        const res = await updateShop({
+        await updateShop({
           oldLogoUrl: shop.logoUrl,
           data: {
             id: shop.id,
-            name: value.name,
-            address: value.address,
+            name: { th: value.name.th, lo: value.name.lo },
+            address: { th: value.address.th, lo: value.address.lo },
             phone: value.phone,
             logoUrl: value.logoUrl,
           },
@@ -49,7 +59,7 @@ export default function EditShopForm({ shop }: Props) {
 
         await Swal.fire({
           icon: "success",
-          title: res.message,
+          title: t("shop.updateSuccess"),
           timer: 1500,
           showConfirmButton: false,
         });
@@ -59,20 +69,12 @@ export default function EditShopForm({ shop }: Props) {
       } catch (error: any) {
         Swal.fire({
           icon: "error",
-          title: "แก้ไขร้านไม่สำเร็จ",
-          text: error.message ?? "เกิดข้อผิดพลาด",
+          title: t("shop.updateFailed"),
+          text: error.message ?? t("common.somethingWentWrong"),
         });
       }
     },
   });
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl?.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
 
   return (
     <div>
@@ -90,14 +92,16 @@ export default function EditShopForm({ shop }: Props) {
                   <FormField field={field}>
                     {(hasError) => (
                       <>
-                        <FieldLabel htmlFor={field.name}>โลโก้ร้าน</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                          {t.shop.logo}
+                        </FieldLabel>
 
                         {previewUrl && (
                           <div className="flex justify-center my-3">
                             <div className="relative w-48 h-48 sm:w-60 sm:h-60 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-xs group">
                               <img
                                 src={previewUrl}
-                                alt="Logo Preview"
+                                alt={t.shop.logo}
                                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                               />
                             </div>
@@ -129,53 +133,119 @@ export default function EditShopForm({ shop }: Props) {
                 )}
               </form.Field>
 
-              <form.Field name="name">
-                {(field) => (
-                  <FormField field={field}>
-                    {(hasError) => (
-                      <>
-                        <FieldLabel>ชื่อร้าน</FieldLabel>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <form.Field name="name.th">
+                  {(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <>
+                          <FieldLabel>{t.shop.name} (ภาษาไทย)</FieldLabel>
 
-                        <Input
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          aria-invalid={hasError}
-                        />
-                      </>
-                    )}
-                  </FormField>
-                )}
-              </form.Field>
-
-              <form.Field name="address">
-                {(field) => (
-                  <FormField field={field}>
-                    {(hasError) => (
-                      <>
-                        <FieldLabel>ที่อยู่ร้าน</FieldLabel>
-
-                        <InputGroup>
-                          <InputGroupTextarea
+                          <Input
+                            id={field.name}
+                            name={field.name}
+                            type="text"
+                            placeholder={t("shop.namePlaceholderTh")}
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             aria-invalid={hasError}
                           />
-                        </InputGroup>
-                      </>
-                    )}
-                  </FormField>
-                )}
-              </form.Field>
+                        </>
+                      )}
+                    </FormField>
+                  )}
+                </form.Field>
+
+                <form.Field name="name.lo">
+                  {(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <>
+                          <FieldLabel htmlFor={field.name}>
+                            {t.shop.name} (ພາສາລາວ)
+                          </FieldLabel>
+                          <Input
+                            id={field.name}
+                            name={field.name}
+                            type="text"
+                            placeholder={t("shop.namePlaceholderLo")}
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={hasError}
+                          />
+                        </>
+                      )}
+                    </FormField>
+                  )}
+                </form.Field>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <form.Field name="address.th">
+                  {(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <>
+                          <FieldLabel htmlFor={field.name}>
+                            {t.shop.address} (ไทย)
+                          </FieldLabel>
+                          <InputGroup>
+                            <InputGroupTextarea
+                              id={field.name}
+                              name={field.name}
+                              placeholder={t("shop.addressPlaceholderTh")}
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              aria-invalid={hasError}
+                            />
+                          </InputGroup>
+                        </>
+                      )}
+                    </FormField>
+                  )}
+                </form.Field>
+
+                <form.Field name="address.lo">
+                  {(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <>
+                          <FieldLabel htmlFor={field.name}>
+                            {t.shop.address} (ພາສາລາວ)
+                          </FieldLabel>
+                          <InputGroup>
+                            <InputGroupTextarea
+                              id={field.name}
+                              name={field.name}
+                              placeholder={t("shop.addressPlaceholderLo")}
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              aria-invalid={hasError}
+                            />
+                          </InputGroup>
+                        </>
+                      )}
+                    </FormField>
+                  )}
+                </form.Field>
+              </div>
 
               <form.Field name="phone">
                 {(field) => (
                   <FormField field={field}>
                     {(hasError) => (
                       <>
-                        <FieldLabel>เบอร์โทร</FieldLabel>
+                        <FieldLabel>{t.shop.phone}</FieldLabel>
 
                         <Input
+                          id={field.name}
+                          name={field.name}
                           value={field.state.value}
+                          placeholder={t("shop.phonePlaceholder")}
                           onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={hasError}
                         />
@@ -190,7 +260,7 @@ export default function EditShopForm({ shop }: Props) {
               {(canSubmit) => (
                 <div className="mt-6 flex justify-end">
                   <Button type="submit" disabled={!canSubmit || isPending}>
-                    {isPending ? "กำลังบันทึก..." : "บันทึกการแก้ไข"}
+                    {isPending ? t.common.saving : t.common.save}
                   </Button>
                 </div>
               )}

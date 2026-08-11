@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupTextarea } from "@/components/ui/input-group";
 import { useCreateShop } from "@/features/shop/hooks/useShop";
 import { createShopSchema } from "@/features/shop/schemas/shop-schemas";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ import Swal from "sweetalert2";
 
 export const Route = createFileRoute("/_protected/settings/shop/add-shop")({
   staticData: {
-    title:  "shop.addShop",
+    title: "shop.addShop",
     showBackButton: true,
     className: "w-full max-w-2xl border-2 p-4 rounded-2xl",
   },
@@ -23,6 +24,7 @@ function RouteComponent() {
   const { mutateAsync: createShop, isPending } = useCreateShop();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     return () => {
@@ -46,7 +48,7 @@ function RouteComponent() {
       phone: "",
     },
     validators: {
-      onSubmit: createShopSchema,
+      onSubmit: createShopSchema(t),
     },
     onSubmit: async ({ value }) => {
       if (!value.logoUrl) {
@@ -54,7 +56,7 @@ function RouteComponent() {
       }
 
       try {
-        const resData = await createShop({
+        await createShop({
           name: {
             th: value.name.th,
             lo: value.name.lo,
@@ -69,7 +71,7 @@ function RouteComponent() {
 
         await Swal.fire({
           icon: "success",
-          title: resData.message,
+          title: t("shop.createSuccess"),
           timer: 1500,
           showConfirmButton: false,
         });
@@ -79,8 +81,8 @@ function RouteComponent() {
       } catch (error: any) {
         Swal.fire({
           icon: "error",
-          title: "เพิ่มร้านไม่สำเร็จ",
-          text: error.response?.data?.message ?? "เกิดข้อพิดพาดในการเพิ่มร้าน",
+          title: t("shop.createFailed"),
+          text: error.response?.data?.message ?? t("common.somethingWentWrong"),
         });
       }
     },
@@ -100,14 +102,16 @@ function RouteComponent() {
                 <FormField field={field}>
                   {(hasError) => (
                     <>
-                      <FieldLabel htmlFor={field.name}>โลโก้ร้าน</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        {t.shop.logo}
+                      </FieldLabel>
 
                       {previewUrl && (
                         <div className="flex justify-center my-3">
                           <div className="relative w-48 h-48 sm:w-60 sm:h-60 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-xs group">
                             <img
                               src={previewUrl}
-                              alt="Logo Preview"
+                              alt={t.shop.logo}
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                             />
                           </div>
@@ -143,13 +147,13 @@ function RouteComponent() {
                     {(hasError) => (
                       <>
                         <FieldLabel htmlFor={field.name}>
-                          ชื่อร้าน (ไทย)
+                          {t.shop.name} (ภาษาไทย)
                         </FieldLabel>
                         <Input
                           id={field.name}
                           name={field.name}
                           type="text"
-                          placeholder="เช่น: ร้านส้มตํา, ก๋วยเตี๋ยว"
+                          placeholder={t("shop.namePlaceholderTh")}
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={hasError}
@@ -166,13 +170,13 @@ function RouteComponent() {
                     {(hasError) => (
                       <>
                         <FieldLabel htmlFor={field.name}>
-                          ชื่อร้าน (ພາສາລາວ)
+                          {t.shop.name} (ພາສາລາວ)
                         </FieldLabel>
                         <Input
                           id={field.name}
                           name={field.name}
                           type="text"
-                          placeholder="ເຊັ່ນ: ร้านส้มตํา, ก๋วยเตี๋ยว"
+                          placeholder={t("shop.namePlaceholderLo")}
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={hasError}
@@ -191,13 +195,13 @@ function RouteComponent() {
                     {(hasError) => (
                       <>
                         <FieldLabel htmlFor={field.name}>
-                          ที่อยู่ร้าน (ไทย)
+                          {t.shop.address} (ภาษาไทย)
                         </FieldLabel>
                         <InputGroup>
                           <InputGroupTextarea
                             id={field.name}
                             name={field.name}
-                            placeholder="เช่น 123 หมู่ 4 ต.บ้านใหม่"
+                            placeholder={t("shop.addressPlaceholderTh")}
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             aria-invalid={hasError}
@@ -215,13 +219,13 @@ function RouteComponent() {
                     {(hasError) => (
                       <>
                         <FieldLabel htmlFor={field.name}>
-                          ที่อยู่ร้าน (ພາສາລາວ)
+                          {t.shop.address} (ພາສາລາວ)
                         </FieldLabel>
                         <InputGroup>
                           <InputGroupTextarea
                             id={field.name}
                             name={field.name}
-                            placeholder="ເຊັ່ນ: 123 ໝູ່ 4, ບ້ານ ໃໝ່"
+                            placeholder={t("shop.addressPlaceholderLo")}
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             aria-invalid={hasError}
@@ -240,12 +244,12 @@ function RouteComponent() {
                   {(hasError) => (
                     <>
                       <FieldLabel htmlFor={field.name}>
-                        เบอร์โทรติดต่อ
+                        {t.shop.phone}
                       </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
-                        placeholder="เช่น 099*******"
+                        placeholder={t("shop.phonePlaceholder")}
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={hasError}
@@ -260,7 +264,7 @@ function RouteComponent() {
           <form.Subscribe selector={(state) => state.canSubmit}>
             {(canSubmit) => (
               <Button type="submit" disabled={!canSubmit || isPending}>
-                {isPending ? "บันทึก...." : "เพิ่มร้าน"}
+                {isPending ? t.common.saving : t.shop.addShop}
               </Button>
             )}
           </form.Subscribe>

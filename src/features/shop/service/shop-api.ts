@@ -5,10 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 export const getStoragePathFromUrl = (publicUrl: string) => {
   if (!publicUrl) return null;
 
-  // แยกข้อความเอาเฉพาะส่วนที่อยู่หลัง /Shop_img/
   const parts = publicUrl.split("/Shop_img/");
   if (parts.length > 1) {
-    // ลบ query string สัญชาติ เช่น ?t=123456 ออกถ้ามี
     return parts[1].split("?")[0];
   }
   return null;
@@ -78,7 +76,7 @@ export const CreateShop = async (data: CreateShopPayload) => {
     logo_url: data.logoUrl,
     address: {
       th: data.address.th,
-      lo: data.name.lo || data.name.th,
+      lo: data.address.lo || data.address.th,
     },
     phone: data.phone,
     create_by: user.id,
@@ -105,7 +103,7 @@ export const UpdateShop = async (id: number, data: UpdateShopPayload) => {
     logo_url: data.logoUrl,
     address: {
       th: data.address.th,
-      lo: data.name.lo || data.name.th,
+      lo: data.address.lo || data.address.th,
     },
       phone: data.phone,
     })
