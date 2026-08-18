@@ -32,25 +32,36 @@ export const lo = {
     phonePlaceholder: "ເຊັ່ນ: 099xxxxxxx",
     updateSuccess: "ແກ້ໄຂຮ້ານສຳເລັດ",
     updateFailed: "ແກ້ໄຂຮ້ານບໍ່ສຳເລັດ",
+    manageDescription: "ເພີ່ມປະເພດສິນຄ້າ, ສິນຄ້າ, ປະເພດໂຕະ ຫຼື ອື່ນໆ",
   },
-  product: {
-    title: "ສິນຄ້າ",
-    addProduct: "ເພີ່ມສິນຄ້າ",
-    name: "ຊື່ສິນຄ້າ",
+
+  food: {
+    title: "ອາຫານ",
+    description: "ເພີ່ມ ແລະ ຈັດການອາຫານພາຍໃນຮ້ານ",
+    manage: "ຈັດການອາຫານ",
+    addFood: "ເພີ່ມອາຫານ",
+    name: "ຊື່ອາຫານ",
     price: "ລາຄາ",
     type: "ປະເພດສິນຄ້າ",
+    count: "ລາຍການ",
   },
 
   foodType: {
-    title: "ປະເພດອາຫານ",
+    title: "ປະເພດສິນຄ້າ",
+    description: "ເພີ່ມ ແລະ ຈັດການປະເພດສິນຄ້າ",
+    manage: "ຈັດການປະເພດສິນຄ້າ",
     add: "ເພີ່ມປະເພດອາຫານ",
     name: "ຊື່ປະເພດ",
+    count: "ປະເພດ",
   },
 
   table: {
-    title: "ໂຕະ",
+    title: "ໂຕະຮ້ານ",
     add: "ເພີ່ມໂຕະ",
     name: "ຊື່ໂຕະ",
+    manage: "ຈັດການໂຕະ",
+    description: "ເພີ່ມ ແລະ ຈັດການໂຕະພາຍໃນຮ້ານ",
+    count: "ໂຕະ",
   },
 
   bill: {

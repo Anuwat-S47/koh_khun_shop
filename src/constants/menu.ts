@@ -19,7 +19,7 @@ export const sidebarMenu: SidebarMenu[] = [
     children: [
       {
         title: "shopSetting",
-        to: "/settings/shop",
+        to: "/settings/shop-manage",
         icon: ShoppingBag,
       },
 

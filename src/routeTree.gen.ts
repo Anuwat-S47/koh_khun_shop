@@ -14,11 +14,11 @@ import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as ProtectedBillIndexRouteImport } from './routes/_protected/bill/index'
-import { Route as ProtectedSettingsShopIndexRouteImport } from './routes/_protected/settings/shop/index'
+import { Route as ProtectedSettingsShopManageIndexRouteImport } from './routes/_protected/settings/shop-manage/index'
 import { Route as ProtectedSettingsOtherIndexRouteImport } from './routes/_protected/settings/other/index'
-import { Route as ProtectedSettingsShopAddShopRouteImport } from './routes/_protected/settings/shop/add-shop'
-import { Route as ProtectedSettingsShopShopIdIndexRouteImport } from './routes/_protected/settings/shop/$shopId/index'
-import { Route as ProtectedSettingsShopShopIdEditShopRouteImport } from './routes/_protected/settings/shop/$shopId/edit-shop'
+import { Route as ProtectedSettingsShopManageAddShopRouteImport } from './routes/_protected/settings/shop-manage/add-shop'
+import { Route as ProtectedSettingsShopManageShopIdIndexRouteImport } from './routes/_protected/settings/shop-manage/$shopId/index'
+import { Route as ProtectedSettingsShopManageShopIdEditShopRouteImport } from './routes/_protected/settings/shop-manage/$shopId/edit-shop'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -43,10 +43,10 @@ const ProtectedBillIndexRoute = ProtectedBillIndexRouteImport.update({
   path: '/bill/',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-const ProtectedSettingsShopIndexRoute =
-  ProtectedSettingsShopIndexRouteImport.update({
-    id: '/settings/shop/',
-    path: '/settings/shop/',
+const ProtectedSettingsShopManageIndexRoute =
+  ProtectedSettingsShopManageIndexRouteImport.update({
+    id: '/settings/shop-manage/',
+    path: '/settings/shop-manage/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 const ProtectedSettingsOtherIndexRoute =
@@ -55,22 +55,22 @@ const ProtectedSettingsOtherIndexRoute =
     path: '/settings/other/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedSettingsShopAddShopRoute =
-  ProtectedSettingsShopAddShopRouteImport.update({
-    id: '/settings/shop/add-shop',
-    path: '/settings/shop/add-shop',
+const ProtectedSettingsShopManageAddShopRoute =
+  ProtectedSettingsShopManageAddShopRouteImport.update({
+    id: '/settings/shop-manage/add-shop',
+    path: '/settings/shop-manage/add-shop',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedSettingsShopShopIdIndexRoute =
-  ProtectedSettingsShopShopIdIndexRouteImport.update({
-    id: '/settings/shop/$shopId/',
-    path: '/settings/shop/$shopId/',
+const ProtectedSettingsShopManageShopIdIndexRoute =
+  ProtectedSettingsShopManageShopIdIndexRouteImport.update({
+    id: '/settings/shop-manage/$shopId/',
+    path: '/settings/shop-manage/$shopId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedSettingsShopShopIdEditShopRoute =
-  ProtectedSettingsShopShopIdEditShopRouteImport.update({
-    id: '/settings/shop/$shopId/edit-shop',
-    path: '/settings/shop/$shopId/edit-shop',
+const ProtectedSettingsShopManageShopIdEditShopRoute =
+  ProtectedSettingsShopManageShopIdEditShopRouteImport.update({
+    id: '/settings/shop-manage/$shopId/edit-shop',
+    path: '/settings/shop-manage/$shopId/edit-shop',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 
@@ -78,21 +78,21 @@ export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
   '/login': typeof AuthLoginRoute
   '/bill/': typeof ProtectedBillIndexRoute
-  '/settings/shop/add-shop': typeof ProtectedSettingsShopAddShopRoute
+  '/settings/shop-manage/add-shop': typeof ProtectedSettingsShopManageAddShopRoute
   '/settings/other/': typeof ProtectedSettingsOtherIndexRoute
-  '/settings/shop/': typeof ProtectedSettingsShopIndexRoute
-  '/settings/shop/$shopId/edit-shop': typeof ProtectedSettingsShopShopIdEditShopRoute
-  '/settings/shop/$shopId/': typeof ProtectedSettingsShopShopIdIndexRoute
+  '/settings/shop-manage/': typeof ProtectedSettingsShopManageIndexRoute
+  '/settings/shop-manage/$shopId/edit-shop': typeof ProtectedSettingsShopManageShopIdEditShopRoute
+  '/settings/shop-manage/$shopId/': typeof ProtectedSettingsShopManageShopIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof ProtectedIndexRoute
   '/login': typeof AuthLoginRoute
   '/bill': typeof ProtectedBillIndexRoute
-  '/settings/shop/add-shop': typeof ProtectedSettingsShopAddShopRoute
+  '/settings/shop-manage/add-shop': typeof ProtectedSettingsShopManageAddShopRoute
   '/settings/other': typeof ProtectedSettingsOtherIndexRoute
-  '/settings/shop': typeof ProtectedSettingsShopIndexRoute
-  '/settings/shop/$shopId/edit-shop': typeof ProtectedSettingsShopShopIdEditShopRoute
-  '/settings/shop/$shopId': typeof ProtectedSettingsShopShopIdIndexRoute
+  '/settings/shop-manage': typeof ProtectedSettingsShopManageIndexRoute
+  '/settings/shop-manage/$shopId/edit-shop': typeof ProtectedSettingsShopManageShopIdEditShopRoute
+  '/settings/shop-manage/$shopId': typeof ProtectedSettingsShopManageShopIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,11 +101,11 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/_protected/bill/': typeof ProtectedBillIndexRoute
-  '/_protected/settings/shop/add-shop': typeof ProtectedSettingsShopAddShopRoute
+  '/_protected/settings/shop-manage/add-shop': typeof ProtectedSettingsShopManageAddShopRoute
   '/_protected/settings/other/': typeof ProtectedSettingsOtherIndexRoute
-  '/_protected/settings/shop/': typeof ProtectedSettingsShopIndexRoute
-  '/_protected/settings/shop/$shopId/edit-shop': typeof ProtectedSettingsShopShopIdEditShopRoute
-  '/_protected/settings/shop/$shopId/': typeof ProtectedSettingsShopShopIdIndexRoute
+  '/_protected/settings/shop-manage/': typeof ProtectedSettingsShopManageIndexRoute
+  '/_protected/settings/shop-manage/$shopId/edit-shop': typeof ProtectedSettingsShopManageShopIdEditShopRoute
+  '/_protected/settings/shop-manage/$shopId/': typeof ProtectedSettingsShopManageShopIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,21 +113,21 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/bill/'
-    | '/settings/shop/add-shop'
+    | '/settings/shop-manage/add-shop'
     | '/settings/other/'
-    | '/settings/shop/'
-    | '/settings/shop/$shopId/edit-shop'
-    | '/settings/shop/$shopId/'
+    | '/settings/shop-manage/'
+    | '/settings/shop-manage/$shopId/edit-shop'
+    | '/settings/shop-manage/$shopId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/bill'
-    | '/settings/shop/add-shop'
+    | '/settings/shop-manage/add-shop'
     | '/settings/other'
-    | '/settings/shop'
-    | '/settings/shop/$shopId/edit-shop'
-    | '/settings/shop/$shopId'
+    | '/settings/shop-manage'
+    | '/settings/shop-manage/$shopId/edit-shop'
+    | '/settings/shop-manage/$shopId'
   id:
     | '__root__'
     | '/_protected'
@@ -135,11 +135,11 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_protected/'
     | '/_protected/bill/'
-    | '/_protected/settings/shop/add-shop'
+    | '/_protected/settings/shop-manage/add-shop'
     | '/_protected/settings/other/'
-    | '/_protected/settings/shop/'
-    | '/_protected/settings/shop/$shopId/edit-shop'
-    | '/_protected/settings/shop/$shopId/'
+    | '/_protected/settings/shop-manage/'
+    | '/_protected/settings/shop-manage/$shopId/edit-shop'
+    | '/_protected/settings/shop-manage/$shopId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,11 +184,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedBillIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/settings/shop/': {
-      id: '/_protected/settings/shop/'
-      path: '/settings/shop'
-      fullPath: '/settings/shop/'
-      preLoaderRoute: typeof ProtectedSettingsShopIndexRouteImport
+    '/_protected/settings/shop-manage/': {
+      id: '/_protected/settings/shop-manage/'
+      path: '/settings/shop-manage'
+      fullPath: '/settings/shop-manage/'
+      preLoaderRoute: typeof ProtectedSettingsShopManageIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/settings/other/': {
@@ -198,25 +198,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedSettingsOtherIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/settings/shop/add-shop': {
-      id: '/_protected/settings/shop/add-shop'
-      path: '/settings/shop/add-shop'
-      fullPath: '/settings/shop/add-shop'
-      preLoaderRoute: typeof ProtectedSettingsShopAddShopRouteImport
+    '/_protected/settings/shop-manage/add-shop': {
+      id: '/_protected/settings/shop-manage/add-shop'
+      path: '/settings/shop-manage/add-shop'
+      fullPath: '/settings/shop-manage/add-shop'
+      preLoaderRoute: typeof ProtectedSettingsShopManageAddShopRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/settings/shop/$shopId/': {
-      id: '/_protected/settings/shop/$shopId/'
-      path: '/settings/shop/$shopId'
-      fullPath: '/settings/shop/$shopId/'
-      preLoaderRoute: typeof ProtectedSettingsShopShopIdIndexRouteImport
+    '/_protected/settings/shop-manage/$shopId/': {
+      id: '/_protected/settings/shop-manage/$shopId/'
+      path: '/settings/shop-manage/$shopId'
+      fullPath: '/settings/shop-manage/$shopId/'
+      preLoaderRoute: typeof ProtectedSettingsShopManageShopIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/settings/shop/$shopId/edit-shop': {
-      id: '/_protected/settings/shop/$shopId/edit-shop'
-      path: '/settings/shop/$shopId/edit-shop'
-      fullPath: '/settings/shop/$shopId/edit-shop'
-      preLoaderRoute: typeof ProtectedSettingsShopShopIdEditShopRouteImport
+    '/_protected/settings/shop-manage/$shopId/edit-shop': {
+      id: '/_protected/settings/shop-manage/$shopId/edit-shop'
+      path: '/settings/shop-manage/$shopId/edit-shop'
+      fullPath: '/settings/shop-manage/$shopId/edit-shop'
+      preLoaderRoute: typeof ProtectedSettingsShopManageShopIdEditShopRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
   }
@@ -225,22 +225,24 @@ declare module '@tanstack/react-router' {
 interface ProtectedRouteRouteChildren {
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedBillIndexRoute: typeof ProtectedBillIndexRoute
-  ProtectedSettingsShopAddShopRoute: typeof ProtectedSettingsShopAddShopRoute
+  ProtectedSettingsShopManageAddShopRoute: typeof ProtectedSettingsShopManageAddShopRoute
   ProtectedSettingsOtherIndexRoute: typeof ProtectedSettingsOtherIndexRoute
-  ProtectedSettingsShopIndexRoute: typeof ProtectedSettingsShopIndexRoute
-  ProtectedSettingsShopShopIdEditShopRoute: typeof ProtectedSettingsShopShopIdEditShopRoute
-  ProtectedSettingsShopShopIdIndexRoute: typeof ProtectedSettingsShopShopIdIndexRoute
+  ProtectedSettingsShopManageIndexRoute: typeof ProtectedSettingsShopManageIndexRoute
+  ProtectedSettingsShopManageShopIdEditShopRoute: typeof ProtectedSettingsShopManageShopIdEditShopRoute
+  ProtectedSettingsShopManageShopIdIndexRoute: typeof ProtectedSettingsShopManageShopIdIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedBillIndexRoute: ProtectedBillIndexRoute,
-  ProtectedSettingsShopAddShopRoute: ProtectedSettingsShopAddShopRoute,
+  ProtectedSettingsShopManageAddShopRoute:
+    ProtectedSettingsShopManageAddShopRoute,
   ProtectedSettingsOtherIndexRoute: ProtectedSettingsOtherIndexRoute,
-  ProtectedSettingsShopIndexRoute: ProtectedSettingsShopIndexRoute,
-  ProtectedSettingsShopShopIdEditShopRoute:
-    ProtectedSettingsShopShopIdEditShopRoute,
-  ProtectedSettingsShopShopIdIndexRoute: ProtectedSettingsShopShopIdIndexRoute,
+  ProtectedSettingsShopManageIndexRoute: ProtectedSettingsShopManageIndexRoute,
+  ProtectedSettingsShopManageShopIdEditShopRoute:
+    ProtectedSettingsShopManageShopIdEditShopRoute,
+  ProtectedSettingsShopManageShopIdIndexRoute:
+    ProtectedSettingsShopManageShopIdIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

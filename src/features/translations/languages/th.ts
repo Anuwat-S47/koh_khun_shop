@@ -32,26 +32,35 @@ export const th = {
     phonePlaceholder: "เช่น 099xxxxxxx",
     updateSuccess: "แก้ไขร้านสำเร็จ",
     updateFailed: "แก้ไขร้านไม่สำเร็จ",
+    manageDescription: "เพิ่มประเภทสินค้า, สินค้า, ประเภทโต๊ะ หรืออื่นๆ",
   },
-
-  product: {
-    title: "สินค้า",
-    addProduct: "เพิ่มสินค้า",
-    name: "ชื่อสินค้า",
+  food: {
+    title: "อาหาร",
+    addFood: "เพิ่มอาหาร",
+    name: "ชื่ออาหาร",
     price: "ราคา",
-    type: "ประเภทสินค้า",
+    type: "ประเภทอาหาร",
+    description: "เพิ่มและจัดการสินค้าภายในร้าน",
+    manage: "จัดการสินค้า",
+    count: "รายการ",
   },
 
   foodType: {
-    title: "ประเภทอาหาร",
+    title: "ประเภทสินค้า",
+    description: "เพิ่มและจัดการประเภทของสินค้า",
+    manage: "จัดการประเภทสินค้า",
     add: "เพิ่มประเภทอาหาร",
     name: "ชื่อประเภท",
+    count: "ประเภท",
   },
 
   table: {
-    title: "โต๊ะ",
+    title: "โต๊ะร้าน",
+    description: "เพิ่มและจัดการโต๊ะภายในร้าน",
+    manage: "จัดการโต๊ะ",
     add: "เพิ่มโต๊ะ",
     name: "ชื่อโต๊ะ",
+    count: "โต๊ะ",
   },
 
   bill: {
