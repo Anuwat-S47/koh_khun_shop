@@ -1,5 +1,8 @@
 import { supabase } from "@/lib/supabase";
-import { CreateShopTablePayload, UpdateShopTablePayload } from "../types/shop_table_manage_type";
+import {
+  CreateShopTablePayload,
+  UpdateShopTablePayload,
+} from "../types/shop_table_manage_type";
 
 export const GetShopTable = async (shopId: number) => {
   const { data, error } = await supabase
@@ -18,7 +21,10 @@ export const GetShopTable = async (shopId: number) => {
 
 export const CreateShopTable = async (data: CreateShopTablePayload) => {
   const { error } = await supabase.from("shop_table").insert({
-    name: data.name,
+    name: {
+      th: data.name.th,
+      lo: data.name.lo || data.name.th,
+    },
     shop_id: data.shopId,
   });
 

@@ -1,5 +1,7 @@
 export const th = {
   common: {
+    success: "สำเร็จ",
+    ok: "ตกลง",
     save: "บันทึก",
     cancel: "ยกเลิก",
     delete: "ลบ",
@@ -61,6 +63,14 @@ export const th = {
     add: "เพิ่มโต๊ะ",
     name: "ชื่อโต๊ะ",
     count: "โต๊ะ",
+    loadFailed: "ไม่สามารถโหลดข้อมูลโต๊ะได้",
+    empty: "ยังไม่มีโต๊ะ",
+    deleteConfirm: "คุณต้องการลบโต๊ะนี้หรือไม่?",
+    tablePlaceholder: "เช่น โต๊ะ 1",
+    addSuccess: "เพิ่มข้อมูลโต๊ะเรียบร้อยแล้ว",
+    editTable: "แก้ไขโต๊ะ",
+    editDescription: "แก้ไขข้อมูลโต๊ะของร้าน",
+    editSuccess: "แก้ไขข้อมูลโต๊ะเรียบร้อยแล้ว",
   },
 
   bill: {
@@ -105,5 +115,6 @@ export const th = {
     logoRequired: "กรุณาเลือกรูปโลโก้",
     logoType: "รองรับเฉพาะ JPG, PNG และ WebP",
     logoSize: "รูปภาพต้องมีขนาดไม่เกิน 5MB",
+    required: "กรุณากรอกข้อมูล",
   },
 } as const;

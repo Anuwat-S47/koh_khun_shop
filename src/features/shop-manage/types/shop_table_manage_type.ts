@@ -1,5 +1,9 @@
 import { MultiLangField } from "@/features/translations/types/language-type";
 
+export type ShopTable = {
+  id: number;
+  name: MultiLangField;
+};
 
 export type CreateShopTablePayload = {
   name: MultiLangField;
@@ -10,4 +14,11 @@ export type UpdateShopTablePayload = {
   id: number;
   name: MultiLangField;
   shopId: number;
+};
+
+export type ShopTableEditDialogProps = {
+  shopId: number;
+  table: ShopTable | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };

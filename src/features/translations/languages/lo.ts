@@ -1,5 +1,7 @@
 export const lo = {
   common: {
+    success: "ສຳເລັດ",
+    ok: "ຕົກລົງ",
     save: "ບັນທຶກ",
     cancel: "ຍົກເລີກ",
     delete: "ລຶບ",
@@ -62,6 +64,14 @@ export const lo = {
     manage: "ຈັດການໂຕະ",
     description: "ເພີ່ມ ແລະ ຈັດການໂຕະພາຍໃນຮ້ານ",
     count: "ໂຕະ",
+    loadFailed: "ບໍ່ສາມາດໂຫຼດຂໍ້ມູນໂຕະໄດ້",
+    empty: "ຍັງບໍ່ມີໂຕະ",
+    deleteConfirm: "ທ່ານຕ້ອງການລຶບໂຕະນີ້ບໍ?",
+    tablePlaceholder: "ເຊັ່ນ: ໂຕະ 1",
+    addSuccess: "ເພີ່ມຂໍ້ມູນໂຕະສຳເລັດແລ້ວ",
+    editTable: "ແກ້ໄຂໂຕະ",
+    editDescription: "ແກ້ໄຂຂໍ້ມູນໂຕະຂອງຮ້ານ",
+    editSuccess: "ແກ້ໄຂຂໍ້ມູນໂຕະສຳເລັດແລ້ວ",
   },
 
   bill: {
@@ -106,5 +116,6 @@ export const lo = {
     logoRequired: "ກະລຸນາເລືອກໂລໂກ້",
     logoType: "ຮອງຮັບສະເພາະ JPG, PNG ແລະ WebP",
     logoSize: "ຮູບພາບຕ້ອງມີຂະໜາດບໍ່ເກີນ 5MB",
+    required: "ກະລຸນາປ້ອນຂໍ້ມູນ",
   },
 } as const;
