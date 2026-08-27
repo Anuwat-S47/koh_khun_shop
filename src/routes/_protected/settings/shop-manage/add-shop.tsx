@@ -11,7 +11,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-export const Route = createFileRoute("/_protected/settings/shop-manage/add-shop")({
+export const Route = createFileRoute(
+  "/_protected/settings/shop-manage/add-shop",
+)({
   staticData: {
     title: "shop.addShop",
     showBackButton: true,
@@ -76,7 +78,7 @@ function RouteComponent() {
           showConfirmButton: false,
         });
         navigate({
-          to: "/settings/shop",
+          to: "/settings/shop-manage",
         });
       } catch (error: any) {
         Swal.fire({
@@ -141,30 +143,30 @@ function RouteComponent() {
             </form.Field>
 
             {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-              <form.Field name="name.th">
-                {(field) => (
-                  <FormField field={field}>
-                    {(hasError) => (
-                      <>
-                        <FieldLabel htmlFor={field.name}>
-                          {t.shop.name} (ภาษาไทย)
-                        </FieldLabel>
-                        <Input
-                          id={field.name}
-                          name={field.name}
-                          type="text"
-                          placeholder={t("shop.namePlaceholderTh")}
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          aria-invalid={hasError}
-                        />
-                      </>
-                    )}
-                  </FormField>
-                )}
-              </form.Field>
+            <form.Field name="name.th">
+              {(field) => (
+                <FormField field={field}>
+                  {(hasError) => (
+                    <>
+                      <FieldLabel htmlFor={field.name}>
+                        {t.shop.name}
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="text"
+                        placeholder={t("shop.namePlaceholderTh")}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        aria-invalid={hasError}
+                      />
+                    </>
+                  )}
+                </FormField>
+              )}
+            </form.Field>
 
-              {/* <form.Field name="name.lo">
+            {/* <form.Field name="name.lo">
                 {(field) => (
                   <FormField field={field}>
                     {(hasError) => (
@@ -189,31 +191,31 @@ function RouteComponent() {
             {/* </div> */}
 
             {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-              <form.Field name="address.th">
-                {(field) => (
-                  <FormField field={field}>
-                    {(hasError) => (
-                      <>
-                        <FieldLabel htmlFor={field.name}>
-                          {t.shop.address} (ภาษาไทย)
-                        </FieldLabel>
-                        <InputGroup>
-                          <InputGroupTextarea
-                            id={field.name}
-                            name={field.name}
-                            placeholder={t("shop.addressPlaceholderTh")}
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            aria-invalid={hasError}
-                          />
-                        </InputGroup>
-                      </>
-                    )}
-                  </FormField>
-                )}
-              </form.Field>
+            <form.Field name="address.th">
+              {(field) => (
+                <FormField field={field}>
+                  {(hasError) => (
+                    <>
+                      <FieldLabel htmlFor={field.name}>
+                        {t.shop.address}
+                      </FieldLabel>
+                      <InputGroup>
+                        <InputGroupTextarea
+                          id={field.name}
+                          name={field.name}
+                          placeholder={t("shop.addressPlaceholderTh")}
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={hasError}
+                        />
+                      </InputGroup>
+                    </>
+                  )}
+                </FormField>
+              )}
+            </form.Field>
 
-              {/* <form.Field name="address.lo">
+            {/* <form.Field name="address.lo">
                 {(field) => (
                   <FormField field={field}>
                     {(hasError) => (

@@ -92,8 +92,9 @@ export const th = {
     logoutConfirm: "ต้องการออกจากระบบหรือไม่?",
     loginSuccess: "เข้าสู่ระบบสำเร็จ",
     logoutSuccess: "ออกจากระบบสำเร็จ",
+    loginFailed: "เข้าสู่ระบบไม่สำเร็จ",
+    invalidCredentials: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
   },
-
   language: {
     title: "ภาษา",
   },

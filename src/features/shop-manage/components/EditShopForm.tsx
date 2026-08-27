@@ -134,29 +134,29 @@ export default function EditShopForm({ shop }: Props) {
               </form.Field>
 
               {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2"> */}
-                <form.Field name="name.th">
-                  {(field) => (
-                    <FormField field={field}>
-                      {(hasError) => (
-                        <>
-                          <FieldLabel>{t.shop.name} (ภาษาไทย)</FieldLabel>
+              <form.Field name="name.th">
+                {(field) => (
+                  <FormField field={field}>
+                    {(hasError) => (
+                      <>
+                        <FieldLabel>{t.shop.name}</FieldLabel>
 
-                          <Input
-                            id={field.name}
-                            name={field.name}
-                            type="text"
-                            placeholder={t("shop.namePlaceholderTh")}
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            aria-invalid={hasError}
-                          />
-                        </>
-                      )}
-                    </FormField>
-                  )}
-                </form.Field>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          type="text"
+                          placeholder={t("shop.namePlaceholderTh")}
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={hasError}
+                        />
+                      </>
+                    )}
+                  </FormField>
+                )}
+              </form.Field>
 
-                {/* <form.Field name="name.lo">
+              {/* <form.Field name="name.lo">
                   {(field) => (
                     <FormField field={field}>
                       {(hasError) => (
@@ -181,33 +181,31 @@ export default function EditShopForm({ shop }: Props) {
               {/* </div> */}
 
               {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2"> */}
-                <form.Field name="address.th">
-                  {(field) => (
-                    <FormField field={field}>
-                      {(hasError) => (
-                        <>
-                          <FieldLabel htmlFor={field.name}>
-                            {t.shop.address} (ภาษาไทย)
-                          </FieldLabel>
-                          <InputGroup>
-                            <InputGroupTextarea
-                              id={field.name}
-                              name={field.name}
-                              placeholder={t("shop.addressPlaceholderTh")}
-                              value={field.state.value}
-                              onChange={(e) =>
-                                field.handleChange(e.target.value)
-                              }
-                              aria-invalid={hasError}
-                            />
-                          </InputGroup>
-                        </>
-                      )}
-                    </FormField>
-                  )}
-                </form.Field>
+              <form.Field name="address.th">
+                {(field) => (
+                  <FormField field={field}>
+                    {(hasError) => (
+                      <>
+                        <FieldLabel htmlFor={field.name}>
+                          {t.shop.address}
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupTextarea
+                            id={field.name}
+                            name={field.name}
+                            placeholder={t("shop.addressPlaceholderTh")}
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={hasError}
+                          />
+                        </InputGroup>
+                      </>
+                    )}
+                  </FormField>
+                )}
+              </form.Field>
 
-                {/* <form.Field name="address.lo">
+              {/* <form.Field name="address.lo">
                   {(field) => (
                     <FormField field={field}>
                       {(hasError) => (

@@ -93,6 +93,8 @@ export const lo = {
     logoutConfirm: "ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ?",
     loginSuccess: "ເຂົ້າລະບົບສຳເລັດ",
     logoutSuccess: "ອອກຈາກລະບົບສຳເລັດ",
+    loginFailed: "ເຂົ້າລະບົບບໍ່ສຳເລັດ",
+    invalidCredentials: "ອີເມວ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ",
   },
 
   language: {
