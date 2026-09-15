@@ -1,6 +1,7 @@
 export const lo = {
   common: {
     success: "ສຳເລັດ",
+    error: "ເກີດຂໍ້ຜິດພາດ",
     ok: "ຕົກລົງ",
     save: "ບັນທຶກ",
     cancel: "ຍົກເລີກ",
@@ -53,8 +54,19 @@ export const lo = {
     description: "ເພີ່ມ ແລະ ຈັດການປະເພດສິນຄ້າ",
     manage: "ຈັດການປະເພດສິນຄ້າ",
     add: "ເພີ່ມປະເພດອາຫານ",
+    editfoodType: "ແກ້ໄຂປະເພດອາຫານ",
+    editDescription: "ແກ້ໄຂຂໍ້ມູນປະເພດອາຫານ",
     name: "ຊື່ປະເພດ",
+    foodTypePlaceholder: "ເຊັ່ນ ອາຫານຈານດຽວ",
+
     count: "ປະເພດ",
+    empty: "ຍັງບໍ່ມີປະເພດອາຫານ",
+    loadFailed: "ບໍ່ສາມາດໂຫຼດປະເພດອາຫານໄດ້",
+    deleteConfirm: "ທ່ານຕ້ອງການລຶບປະເພດອາຫານນີ້ບໍ?",
+    addSuccess: "ເພີ່ມປະເພດອາຫານສຳເລັດແລ້ວ",
+    editSuccess: "ແກ້ໄຂປະເພດອາຫານສຳເລັດແລ້ວ",
+    deleteSuccess: "ລຶບປະເພດອາຫານສຳເລັດແລ້ວ",
+    deleteFailed: "ບໍ່ສາມາດລຶບປະເພດອາຫານໄດ້",
   },
 
   table: {
@@ -72,6 +84,8 @@ export const lo = {
     editTable: "ແກ້ໄຂໂຕະ",
     editDescription: "ແກ້ໄຂຂໍ້ມູນໂຕະຂອງຮ້ານ",
     editSuccess: "ແກ້ໄຂຂໍ້ມູນໂຕະສຳເລັດແລ້ວ",
+    deleteSuccess: "ລຶບຂໍ້ມູນໂຕະສຳເລັດແລ້ວ",
+    deleteFailed: "ບໍ່ສາມາດລຶບຂໍ້ມູນໂຕະໄດ້",
   },
 
   bill: {

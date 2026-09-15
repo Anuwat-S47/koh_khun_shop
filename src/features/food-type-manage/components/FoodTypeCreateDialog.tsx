@@ -11,22 +11,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { useForm } from "@tanstack/react-form";
-import { useCreateShopTable } from "../../hooks/useShopTableManage";
-import {
-  CreateShopTableRequest,
-  shopTableSchema,
-} from "../../schemas/shop-table-schemas";
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import Swal from "sweetalert2";
-import { ShopTableCreateDialogProps } from "../../types/shop_table_manage_type";
+import { useCreateFoodType } from "../hooks/useFoodTypeManage";
+import { FoodTypeCreateDialogProps } from "../types/food_type_manage_type";
+import { CreateFoodTypeRequest, foodTypeSchema } from "../schemas/food-type-schemas";
 
-export function ShopTableCreateDialog({
+export function FoodTypeCreateDialog({
   shopId,
   open,
   onOpenChange,
-}: ShopTableCreateDialogProps) {
-  const { mutateAsync: createShopTable, isPending } =
-    useCreateShopTable(shopId);
+}: FoodTypeCreateDialogProps) {
+  const { mutateAsync: createFoodType, isPending } =
+    useCreateFoodType(shopId);
   const { t } = useTranslation();
 
   const form = useForm({
@@ -35,15 +32,15 @@ export function ShopTableCreateDialog({
         th: "",
         lo: "",
       },
-    } satisfies CreateShopTableRequest,
+    } satisfies CreateFoodTypeRequest,
 
     validators: {
-      onSubmit: shopTableSchema(t),
+      onSubmit: foodTypeSchema(t),
     },
 
     onSubmit: async ({ value }) => {
       try {
-        await createShopTable({
+        await createFoodType({
           name: {
             th: value.name.th,
             lo: value.name.lo,
@@ -57,11 +54,11 @@ export function ShopTableCreateDialog({
         await Swal.fire({
           icon: "success",
           title: t.common.success,
-          text: t.table.addSuccess,
+          text: t.foodType.addSuccess,
           confirmButtonText: t.common.ok,
         });
       } catch (error) {
-        console.error("Create shop table error:", error);
+        console.error("Create food type error:", error);
       }
     },
   });
@@ -77,9 +74,9 @@ export function ShopTableCreateDialog({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t.table.add}</DialogTitle>
+          <DialogTitle>{t.foodType.add}</DialogTitle>
 
-          <DialogDescription>{t.table.description}</DialogDescription>
+          <DialogDescription>{t.foodType.description}</DialogDescription>
         </DialogHeader>
 
         <form
@@ -100,11 +97,11 @@ export function ShopTableCreateDialog({
 
               return (
                 <div className="space-y-2">
-                  <Label htmlFor="table-name-th">{t.table.name}</Label>
+                  <Label htmlFor="food-type-name-th">{t.foodType.name}</Label>
 
                   <Input
-                    id="table-name-th"
-                    placeholder={t.table.tablePlaceholder}
+                    id="food-type-name-th"
+                    placeholder={t.foodType.foodTypePlaceholder}
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
@@ -128,10 +125,10 @@ export function ShopTableCreateDialog({
 
               return (
                 <div className="space-y-2">
-                  <Label htmlFor="table-name-lo">ຊື່ໂຕະ (ລາວ)</Label>
+                  <Label htmlFor="food-type-name-lo">ຊື່ໂຕະ (ລາວ)</Label>
 
                   <Input
-                    id="table-name-lo"
+                    id="food-type-name-lo"
                     placeholder="ເຊັ່ນ ໂຕະ 1"
                     value={field.state.value}
                     onBlur={field.handleBlur}
@@ -158,7 +155,7 @@ export function ShopTableCreateDialog({
             </Button>
 
             <Button type="submit" disabled={isPending}>
-              {isPending ? t.common.saving : t.table.add}
+              {isPending ? t.common.saving : t.foodType.add}
             </Button>
           </DialogFooter>
         </form>

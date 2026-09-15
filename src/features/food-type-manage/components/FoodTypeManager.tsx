@@ -1,7 +1,9 @@
 import { useState } from "react";
-
-import { Button } from "@/components/ui/button";
+import { FoodType } from "../types/food_type_manage_type";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
+import { useDeleteFoodType, useGetFoodTypes } from "../hooks/useFoodTypeManage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Pencil, Plus, Tags, Trash2, Utensils } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -10,40 +12,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { Pencil, Plus, Trash2, Utensils } from "lucide-react";
-
-import {
-  useDeleteShopTable,
-  useGetShopTables,
-} from "../hooks/useShopTableManage";
-
-import { ShopTableEditDialog } from "./shopTable/ShopTableEditDialog";
-import { ShopTableCreateDialog } from "./shopTable/ShopTableCreateDialog";
-import { ShopTable } from "../types/shop_table_manage_type";
-import { useTranslation } from "@/features/translations/hooks/useTranSlation";
+import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
+import { FoodTypeCreateDialog } from "./FoodTypeCreateDialog";
+import { FoodTypeEditDialog } from "./FoodTyoeEditDialog";
 
-type ShopTableManagerProps = {
-  shopId: number;
-};
-
-export function ShopTableManager({ shopId }: ShopTableManagerProps) {
+export function FoodTypeManager({ shopId }: { shopId: number }) {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedTable, setSelectedTable] = useState<ShopTable | null>(null);
+  const [selectedFoodType, setSelectedFoodType] = useState<FoodType | null>(
+    null,
+  );
 
   const { t } = useTranslation();
-  const { data: tables, isLoading, isError } = useGetShopTables(shopId);
-  const { mutateAsync: deleteShopTable, isPending: isDeleting } =
-    useDeleteShopTable(shopId);
+  const { data: foodTypes, isLoading, isError } = useGetFoodTypes(shopId);
+  const { mutateAsync: deleteFoodType, isPending: isDeleting } =
+    useDeleteFoodType(shopId);
 
   const handleAdd = () => {
     setCreateDialogOpen(true);
   };
 
-  const handleEdit = (table: ShopTable) => {
-    setSelectedTable(table);
+  const handleEdit = (foodType: FoodType) => {
+    setSelectedFoodType(foodType);
     setEditDialogOpen(true);
   };
 
@@ -51,14 +42,14 @@ export function ShopTableManager({ shopId }: ShopTableManagerProps) {
     setEditDialogOpen(open);
 
     if (!open) {
-      setSelectedTable(null);
+      setSelectedFoodType(null);
     }
   };
 
   const handleDelete = (id: number) => {
     Swal.fire({
       title: t.common.confirm,
-      text: t.table.deleteConfirm,
+      text: t.foodType.deleteConfirm,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: t.common.delete,
@@ -68,21 +59,21 @@ export function ShopTableManager({ shopId }: ShopTableManagerProps) {
       if (!result.isConfirmed) return;
 
       try {
-        await deleteShopTable(id);
+        await deleteFoodType(id);
 
         await Swal.fire({
           icon: "success",
           title: t.common.success,
-          text: t.table.deleteSuccess,
+          text: t.foodType.deleteSuccess,
           confirmButtonText: t.common.ok,
         });
       } catch (error) {
-        console.error("Delete shop table error:", error);
+        console.error("Delete food type error:", error);
 
         Swal.fire({
           icon: "error",
           title: t.common.error,
-          text: t.table.deleteFailed,
+          text: t.foodType.deleteFailed,
           confirmButtonText: t.common.ok,
         });
       }
@@ -96,20 +87,20 @@ export function ShopTableManager({ shopId }: ShopTableManagerProps) {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100">
-                <Utensils className="h-5 w-5" />
+                <Tags className="h-5 w-5" />
               </div>
 
               <div>
-                <CardTitle>{t.table.title}</CardTitle>
+                <CardTitle>{t.foodType.title}</CardTitle>
 
                 <p className="text-sm text-muted-foreground">
-                  {t.table.description}
+                  {t.foodType.description}
                 </p>
               </div>
             </div>
             <Button onClick={handleAdd}>
               <Plus className="mr-2 h-4 w-4" />
-              {t.table.add}
+              {t.foodType.add}
             </Button>
           </div>
         </CardHeader>
@@ -122,49 +113,50 @@ export function ShopTableManager({ shopId }: ShopTableManagerProps) {
           )}
           {isError && (
             <div className="py-10 text-center text-sm text-destructive">
-              {t.table.loadFailed}
+              {t.foodType.loadFailed}
             </div>
           )}
-          {!isLoading && !isError && (!tables || tables.length === 0) && (
+
+          {!isLoading && !isError && (!foodTypes || foodTypes.length === 0) && (
             <div className="flex flex-col items-center justify-center gap-3 py-10">
-              <Utensils className="h-10 w-10 text-muted-foreground" />
+              <Tags className="h-10 w-10 text-muted-foreground" />
 
               <div className="text-center">
-                <p className="font-medium">{t.table.empty}</p>
+                <p className="font-medium">{t.foodType.empty}</p>
 
                 <p className="text-sm text-muted-foreground">
-                  {t.table.description}
+                  {t.foodType.description}
                 </p>
               </div>
 
               <Button onClick={handleAdd}>
                 <Plus className="mr-2 h-4 w-4" />
-                {t.table.add}
+                {t.foodType.add}
               </Button>
             </div>
           )}
-          {!isLoading && !isError && tables && tables.length > 0 && (
+          {!isLoading && !isError && foodTypes && foodTypes.length > 0 && (
             <div className="rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[100px]">#</TableHead>
 
-                    <TableHead>{t.table.name}</TableHead>
+                    <TableHead>{t.foodType.name}</TableHead>
 
                     <TableHead className="w-[160px] text-right">
-                      {t.table.manage}
+                      {t.foodType.manage}
                     </TableHead>
                   </TableRow>
                 </TableHeader>
 
                 <TableBody>
-                  {tables.map((table, index) => (
-                    <TableRow key={table.id}>
-                      <TableCell>{tables.length - index}</TableCell>
+                  {foodTypes.map((foodType, index) => (
+                    <TableRow key={foodType.id}>
+                      <TableCell>{foodTypes.length - index}</TableCell>
 
                       <TableCell className="font-medium">
-                        {table.name.th}
+                        {foodType.name.th}
                       </TableCell>
 
                       <TableCell>
@@ -172,14 +164,14 @@ export function ShopTableManager({ shopId }: ShopTableManagerProps) {
                           <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => handleEdit(table)}
+                            onClick={() => handleEdit(foodType)}
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="destructive"
                             size="icon"
-                            onClick={() => handleDelete(table.id)}
+                            onClick={() => handleDelete(foodType.id)}
                             disabled={isDeleting}
                           >
                             <Trash2 className="h-4 w-4" />
@@ -195,16 +187,16 @@ export function ShopTableManager({ shopId }: ShopTableManagerProps) {
         </CardContent>
       </Card>
 
-      <ShopTableCreateDialog
+      <FoodTypeCreateDialog
         shopId={shopId}
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
       />
 
-      {selectedTable && (
-        <ShopTableEditDialog
+      {selectedFoodType && (
+        <FoodTypeEditDialog
           shopId={shopId}
-          table={selectedTable}
+          foodType={selectedFoodType}
           open={editDialogOpen}
           onOpenChange={handleEditOpenChange}
         />

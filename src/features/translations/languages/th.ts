@@ -1,6 +1,7 @@
 export const th = {
   common: {
     success: "สำเร็จ",
+    error: "เกิดข้อผิดพลาด",
     ok: "ตกลง",
     save: "บันทึก",
     cancel: "ยกเลิก",
@@ -52,8 +53,19 @@ export const th = {
     description: "เพิ่มและจัดการประเภทของสินค้า",
     manage: "จัดการประเภทสินค้า",
     add: "เพิ่มประเภทอาหาร",
+    editfoodType: "แก้ไขประเภทอาหาร",
+    editDescription: "แก้ไขข้อมูลประเภทอาหาร",
     name: "ชื่อประเภท",
+    foodTypePlaceholder: "เช่น อาหารจานเดียว",
+
     count: "ประเภท",
+    empty: "ยังไม่มีประเภทอาหาร",
+    loadFailed: "ไม่สามารถโหลดประเภทอาหารได้",
+    deleteConfirm: "ต้องการลบประเภทอาหารนี้หรือไม่?",
+    addSuccess: "เพิ่มประเภทอาหารเรียบร้อยแล้ว",
+    editSuccess: "แก้ไขประเภทอาหารเรียบร้อยแล้ว",
+    deleteSuccess: "ลบประเภทอาหารเรียบร้อยแล้ว",
+    deleteFailed: "ไม่สามารถลบประเภทอาหารได้",
   },
 
   table: {
@@ -71,6 +83,8 @@ export const th = {
     editTable: "แก้ไขโต๊ะ",
     editDescription: "แก้ไขข้อมูลโต๊ะของร้าน",
     editSuccess: "แก้ไขข้อมูลโต๊ะเรียบร้อยแล้ว",
+    deleteSuccess: "ลบข้อมูลโต๊ะเรียบร้อยแล้ว",
+    deleteFailed: "ไม่สามารถลบข้อมูลโต๊ะได้",
   },
 
   bill: {
