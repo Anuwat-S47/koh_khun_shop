@@ -7,4 +7,4 @@ export const loginSchemas = (t: (key: string) => string) =>
     password: z.string().min(1, t("validation.passwordRequired")),
   });
 
-export type LoginRequest = z.infer<typeof loginSchemas>;
+export type LoginRequest = z.infer<ReturnType<typeof loginSchemas>>;

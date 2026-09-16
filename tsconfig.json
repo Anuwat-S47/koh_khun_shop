@@ -9,6 +9,8 @@
     "noEmit": true,
     "allowJs": true,
 
+    "skipLibCheck": true,
+
     "paths": {
       "@/*": ["./src/*"]
     },
