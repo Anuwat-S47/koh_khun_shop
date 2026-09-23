@@ -48,7 +48,7 @@ export const GetFoods = async (
     .order("created_at", { ascending: false });
 
   if (search.trim()) {
-    query = query.or(`name->>th.ilike.%${search.trim()}%`);
+    query = query.ilike("name", `%${search.trim()}%`);
   }
 
   const { data, error, count } = await query
