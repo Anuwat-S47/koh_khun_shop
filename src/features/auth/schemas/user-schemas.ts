@@ -1,8 +1,10 @@
 import z from "zod";
 
-export const loginSchemas = z.object({
-  email: z.string().email("รูปแบบอิเมลไม่ถูกต้อง"),
-  password: z.string().min(6, "รหัสผ่านอย่างน้อยต้องมี 6 ตัวอักษร"),
-});
+export const loginSchemas = (t: (key: string) => string) =>
+  z.object({
+    email: z.string().min(1, t("validation.emailRequired")),
 
-export type LoginRequest = z.infer<typeof loginSchemas>;
+    password: z.string().min(1, t("validation.passwordRequired")),
+  });
+
+export type LoginRequest = z.infer<ReturnType<typeof loginSchemas>>;

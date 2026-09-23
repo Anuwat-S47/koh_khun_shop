@@ -1,8 +1,26 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { loginSchemas } from "@/features/auth/schemas/user-schemas";
 import Swal from "sweetalert2";
 import { useLogin } from "@/features/auth/hooks/userUser";
+import { Button } from "@/components/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import {
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+import FormField from "@/components/FormField";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 
 export const Route = createFileRoute("/_auth/login")({
   component: RouteComponent,
@@ -10,7 +28,10 @@ export const Route = createFileRoute("/_auth/login")({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { mutate: login, isPending } = useLogin();
+  const { mutateAsync: login, isPending } = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { t } = useTranslation();
 
   const form = useForm({
     defaultValues: {
@@ -18,98 +39,115 @@ function RouteComponent() {
       password: "",
     },
     validators: {
-      onChange: loginSchemas,
+      onSubmit: loginSchemas(t),
     },
     onSubmit: async ({ value }) => {
-      const result = loginSchemas.safeParse(value);
-
-      if (!result.success) {
-        Swal.fire({
-          icon: "error",
-          title: "ข้อมูลไม่ถูกต้อง",
-          text: result.error.issues[0].message,
-        });
-
-        return;
-      }
-
       try {
-        await login(result.data);
+        await login(value);
 
         await Swal.fire({
           icon: "success",
-          title: "Login สำเร็จ",
+          title: t("auth.loginSuccess"),
           timer: 1500,
           showConfirmButton: false,
         });
 
         navigate({
-          to: "/shop",
+          to: "/",
         });
       } catch (error: any) {
         Swal.fire({
           icon: "error",
-          title: "Login ไม่สำเร็จ",
+          title: t("auth.loginFailed"),
           text:
-            error.response?.data?.message ?? "Email หรือ Password ไม่ถูกต้อง",
+            error.response?.data?.message ?? t("auth.invalidCredentials"),
         });
       }
     },
   });
+
   return (
-    <div className="flex justify-center">
-      <div>
-        <h1>Login Page</h1>{" "}
+    <div className="flex justify-center text-center my-10">
+      <div className="w-full max-w-md border-2 p-4 rounded-2xl">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
         >
-          <div>
-            <form.Field name="email">
-              {(field) => (
-                <div>
-                  <input
-                    name="email"
-                    placeholder="Email"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
+          <FieldGroup>
+            <FieldSet>
+              <FieldLegend>{t("auth.login")}</FieldLegend>
 
-                  {field.state.meta.errors.length > 0 && (
-                    <p>{field.state.meta.errors[0]?.message}</p>
+              <FieldGroup>
+                <form.Field name="email">
+                  {(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <>
+                          <FieldLabel htmlFor={field.name}>{t("auth.email")}</FieldLabel>
+                          <Input
+                            id={field.name}
+                            name={field.name}
+                            type="email"
+                            placeholder="You@example.com"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={hasError}
+                          />
+                        </>
+                      )}
+                    </FormField>
                   )}
-                </div>
-              )}
-            </form.Field>
+                </form.Field>
 
-            <form.Field name="password">
-              {(field) => (
-                <div>
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="********"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
+                <form.Field name="password">
+                  {(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <>
+                          <FieldLabel htmlFor={field.name}>{t("auth.password")}</FieldLabel>
+                          <InputGroup>
+                            <InputGroupInput
+                              id={field.name}
+                              name={field.name}
+                              type={showPassword ? "text" : "password"}
+                              placeholder="********"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              aria-invalid={hasError}
+                            />
 
-                  {field.state.meta.errors.length > 0 && (
-                    <p>{field.state.meta.errors[0]?.message}</p>
+                            <InputGroupAddon align="inline-end">
+                              <InputGroupButton
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                aria-label={
+                                  showPassword ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"
+                                }
+                              >
+                                {showPassword ? <EyeOff /> : <Eye />}
+                              </InputGroupButton>
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </>
+                      )}
+                    </FormField>
                   )}
-                </div>
-              )}
-            </form.Field>
+                </form.Field>
+              </FieldGroup>
 
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-            >
-              <button disabled={isPending}>
-                {!isPending ? "Login" : "Loading..."}
-              </button>
-            </form.Subscribe>
-          </div>
+              <form.Subscribe selector={(state) => state.canSubmit}>
+                {(canSubmit) => (
+                  <Button type="submit" disabled={!canSubmit || isPending}>
+                    {isPending ? t("common.loading") : t("auth.login")}
+                  </Button>
+                )}
+              </form.Subscribe>
+            </FieldSet>
+          </FieldGroup>
         </form>
       </div>
     </div>

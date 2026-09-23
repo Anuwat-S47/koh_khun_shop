@@ -1,23 +1,24 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { GetProfile, Login, LogOut } from "../services/user-api";
-import { UserLoginPayload } from "../types/user-type";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { GetMe, Login, LogOut } from "../services/user-api";
+import { queryClient } from "@/lib/query-client";
+import Swal from "sweetalert2";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 
 export function useLogin() {
-  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (formData: UserLoginPayload) => Login(formData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-    },
+    mutationFn: Login
   });
 }
 
 export function useLogOut() {
-  const queryClient = useQueryClient();
-
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: LogOut,
     onSuccess: () => {
+      Swal.fire({
+        icon: "success",
+        title: t("auth.logoutSuccess"),
+      });
       queryClient.removeQueries({
         queryKey: ["me"],
       });
@@ -28,7 +29,7 @@ export function useLogOut() {
 export function useMe() {
   return useQuery({
     queryKey: ["me"],
-    queryFn: GetProfile,
+    queryFn: GetMe,
     staleTime: 1000 * 60 * 5,
   });
 }

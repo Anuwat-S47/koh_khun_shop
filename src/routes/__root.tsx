@@ -1,6 +1,5 @@
-import CustomNavbar from "@/components/CustomNavbar";
 import { Button } from "@/components/ui/button";
-import AuthProvider from "@/features/auth/components/AuthProvider";
+import AuthProvider from "@/components/AuthProvider";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
@@ -46,7 +45,6 @@ export const Route = createRootRoute({
 function RootLayout() {
   return (
     <AuthProvider>
-      <CustomNavbar />
       <Outlet />
     </AuthProvider>
   );
