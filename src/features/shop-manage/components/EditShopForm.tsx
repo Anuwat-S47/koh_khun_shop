@@ -34,9 +34,9 @@ export default function EditShopForm({ shop }: Props) {
 
   const form = useForm({
     defaultValues: {
-      name: { th: shop.name.th, lo: shop.name.lo },
+      name: shop.name,
       logoUrl: null as File | null,
-      address: { th: shop.address.th, lo: shop.address.lo },
+      address: shop.address,
       phone: shop.phone,
     },
 
@@ -50,8 +50,8 @@ export default function EditShopForm({ shop }: Props) {
           oldLogoUrl: shop.logoUrl,
           data: {
             id: shop.id,
-            name: { th: value.name.th, lo: value.name.lo },
-            address: { th: value.address.th, lo: value.address.lo },
+            name: value.name,
+            address: value.address,
             phone: value.phone,
             logoUrl: value.logoUrl,
           },
@@ -133,8 +133,7 @@ export default function EditShopForm({ shop }: Props) {
                 )}
               </form.Field>
 
-              {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2"> */}
-              <form.Field name="name.th">
+              <form.Field name="name">
                 {(field) => (
                   <FormField field={field}>
                     {(hasError) => (
@@ -156,32 +155,7 @@ export default function EditShopForm({ shop }: Props) {
                 )}
               </form.Field>
 
-              {/* <form.Field name="name.lo">
-                  {(field) => (
-                    <FormField field={field}>
-                      {(hasError) => (
-                        <>
-                          <FieldLabel htmlFor={field.name}>
-                            {t.shop.name} (ພາສາລາວ)
-                          </FieldLabel>
-                          <Input
-                            id={field.name}
-                            name={field.name}
-                            type="text"
-                            placeholder={t("shop.namePlaceholderLo")}
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            aria-invalid={hasError}
-                          />
-                        </>
-                      )}
-                    </FormField>
-                  )}
-                </form.Field> */}
-              {/* </div> */}
-
-              {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2"> */}
-              <form.Field name="address.th">
+              <form.Field name="address">
                 {(field) => (
                   <FormField field={field}>
                     {(hasError) => (
@@ -204,33 +178,6 @@ export default function EditShopForm({ shop }: Props) {
                   </FormField>
                 )}
               </form.Field>
-
-              {/* <form.Field name="address.lo">
-                  {(field) => (
-                    <FormField field={field}>
-                      {(hasError) => (
-                        <>
-                          <FieldLabel htmlFor={field.name}>
-                            {t.shop.address} (ພາສາລາວ)
-                          </FieldLabel>
-                          <InputGroup>
-                            <InputGroupTextarea
-                              id={field.name}
-                              name={field.name}
-                              placeholder={t("shop.addressPlaceholderLo")}
-                              value={field.state.value}
-                              onChange={(e) =>
-                                field.handleChange(e.target.value)
-                              }
-                              aria-invalid={hasError}
-                            />
-                          </InputGroup>
-                        </>
-                      )}
-                    </FormField>
-                  )}
-                </form.Field> */}
-              {/* </div> */}
 
               <form.Field name="phone">
                 {(field) => (

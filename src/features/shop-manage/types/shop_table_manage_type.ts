@@ -1,18 +1,16 @@
-import { MultiLangField } from "@/features/translations/types/language-type";
-
 export type ShopTable = {
   id: number;
-  name: MultiLangField;
+  name: string;
 };
 
 export type CreateShopTablePayload = {
-  name: MultiLangField;
+  name: string;
   shopId: number;
 };
 
 export type UpdateShopTablePayload = {
   id: number;
-  name: MultiLangField;
+  name: string;
   shopId: number;
 };
 

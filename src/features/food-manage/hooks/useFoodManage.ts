@@ -1,10 +1,105 @@
-import { useQuery } from "@tanstack/react-query";
-import { GetFoods } from "../service/food-manage-api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { CreateFood, DeleteFood, GetFoods, UpdateFood } from "../service/food-manage-api";
+import {
+  CreateFoodPayload,
+  UpdateFoodPayload,
+} from "../types/food_manage_type";
+import { UploadImg } from "@/features/upload-img/service/upload-img-api";
+import { queryClient } from "@/lib/query-client";
 
-export function useGetFoods(shopId: number) {
+export const useGetFoods = (
+  shopId: number,
+  page: number,
+  pageSize: number,
+  search: string,
+) => {
   return useQuery({
-    queryKey: ["food", shopId],
-    queryFn: () => GetFoods(shopId),
+    queryKey: ["foods", shopId, page, pageSize, search],
+    queryFn: () => GetFoods(shopId, page, pageSize, search),
+
     enabled: !!shopId,
   });
-}
+};
+
+export const useCreateFood = () => {
+  return useMutation({
+    mutationFn: async (data: CreateFoodPayload) => {
+      let imgFoodUrl: string | null = null;
+
+      if (data.imgUrl instanceof File) {
+        imgFoodUrl = await UploadImg(data.imgUrl, "food");
+      }
+
+      return await CreateFood({
+        shopId: data.shopId,
+        typeId: data.typeId,
+        name: data.name,
+        price: data.price,
+        imgUrl: imgFoodUrl,
+      });
+    },
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["foods", variables.shopId],
+      });
+    },
+  });
+};
+
+export const useUpdateFood = () => {
+  return useMutation({
+    mutationFn: async ({
+      oldImgUrl,
+      data,
+    }: {
+      oldImgUrl: string | null;
+      data: UpdateFoodPayload;
+    }) => {
+      let imgUrl: string | null = oldImgUrl;
+
+      if (data.imgUrl && data.imgUrl instanceof File) {
+        if (data.imgUrl instanceof File) {
+          imgUrl = await UploadImg(data.imgUrl, "food");
+        }
+      }
+
+      return await UpdateFood(data.id, {
+        id: data.id,
+        shopId: data.shopId,
+        name: data.name,
+        price: data.price,
+        typeId: data.typeId,
+        imgUrl: imgUrl,
+      });
+    },
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["foods", variables.data.shopId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["food", variables.data.id, variables.data.shopId],
+      });
+    },
+  });
+};
+
+export const useDeleteFood = () => {
+  return useMutation({
+    mutationFn: ({
+      id,
+      shopId,
+    }: {
+      id: number;
+      shopId: number;
+    }) => DeleteFood(id, shopId),
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["foods", variables.shopId],
+      });
+    },
+  });
+};

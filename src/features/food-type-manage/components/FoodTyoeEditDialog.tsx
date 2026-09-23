@@ -13,7 +13,10 @@ import { useForm } from "@tanstack/react-form";
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import Swal from "sweetalert2";
 import { FoodTypeEditDialogProps } from "../types/food_type_manage_type";
-import { CreateFoodTypeRequest, foodTypeSchema } from "../schemas/food-type-schemas";
+import {
+  CreateFoodTypeRequest,
+  foodTypeSchema,
+} from "../schemas/food-type-schemas";
 import { useUpdateFoodType } from "../hooks/useFoodTypeManage";
 
 export function FoodTypeEditDialog({
@@ -27,10 +30,7 @@ export function FoodTypeEditDialog({
 
   const form = useForm({
     defaultValues: {
-      name: {
-        th: foodType?.name.th ?? "",
-        lo: foodType?.name.lo ?? "",
-      },
+      name: foodType?.name || "",
     } satisfies CreateFoodTypeRequest,
 
     validators: {
@@ -94,13 +94,15 @@ export function FoodTypeEditDialog({
           {/* TH */}
 
           <form.Field
-            name="name.th"
+            name="name"
             children={(field) => {
               const error = field.state.meta.errors[0];
 
               return (
                 <div className="space-y-2">
-                  <Label htmlFor="edit-food-type-name-th">{t.foodType.name}</Label>
+                  <Label htmlFor="edit-food-type-name-th">
+                    {t.foodType.name}
+                  </Label>
 
                   <Input
                     id="edit-food-type-name-th"
@@ -117,33 +119,6 @@ export function FoodTypeEditDialog({
               );
             }}
           />
-
-          {/* LO */}
-
-          {/* <form.Field
-            name="name.lo"
-            children={(field) => {
-              const error = field.state.meta.errors[0];
-
-              return (
-                <div className="space-y-2">
-                  <Label htmlFor="edit-table-name-lo">ຊື່ໂຕະ (ລາວ)</Label>
-
-                  <Input
-                    id="edit-table-name-lo"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    disabled={isPending}
-                  />
-
-                  {error && (
-                    <p className="text-sm text-destructive">{error.message}</p>
-                  )}
-                </div>
-              );
-            }}
-          /> */}
 
           <DialogFooter>
             <Button

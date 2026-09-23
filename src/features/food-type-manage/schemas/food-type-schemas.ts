@@ -1,11 +1,9 @@
-import { createMultiLangSchema } from "@/features/translations/schemas/languages-schemas";
 import z from "zod";
 
 export const foodTypeSchema = (t: (key: string) => string) => {
-  const multiLangSchema = createMultiLangSchema(t);
   return z.object({
-    name: multiLangSchema,
+    name: z.string().min(1, t("validation.nameRequired")),
   });
 };
 
-export type CreateFoodTypeRequest = z.infer<ReturnType<typeof foodTypeSchema>>; 
+export type CreateFoodTypeRequest = z.infer<ReturnType<typeof foodTypeSchema>>;

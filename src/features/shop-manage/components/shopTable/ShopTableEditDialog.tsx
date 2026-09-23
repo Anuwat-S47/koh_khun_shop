@@ -26,15 +26,13 @@ export function ShopTableEditDialog({
   open,
   onOpenChange,
 }: ShopTableEditDialogProps) {
-  const { mutateAsync: updateShopTable, isPending } = useUpdateShopTable(shopId);
+  const { mutateAsync: updateShopTable, isPending } =
+    useUpdateShopTable(shopId);
   const { t } = useTranslation();
 
   const form = useForm({
     defaultValues: {
-      name: {
-        th: table?.name.th ?? "",
-        lo: table?.name.lo ?? "",
-      },
+      name: table?.name,
     } satisfies CreateShopTableRequest,
 
     validators: {
@@ -98,7 +96,7 @@ export function ShopTableEditDialog({
           {/* TH */}
 
           <form.Field
-            name="name.th"
+            name="name"
             children={(field) => {
               const error = field.state.meta.errors[0];
 
@@ -121,33 +119,6 @@ export function ShopTableEditDialog({
               );
             }}
           />
-
-          {/* LO */}
-
-          {/* <form.Field
-            name="name.lo"
-            children={(field) => {
-              const error = field.state.meta.errors[0];
-
-              return (
-                <div className="space-y-2">
-                  <Label htmlFor="edit-table-name-lo">ຊື່ໂຕະ (ລາວ)</Label>
-
-                  <Input
-                    id="edit-table-name-lo"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    disabled={isPending}
-                  />
-
-                  {error && (
-                    <p className="text-sm text-destructive">{error.message}</p>
-                  )}
-                </div>
-              );
-            }}
-          /> */}
 
           <DialogFooter>
             <Button

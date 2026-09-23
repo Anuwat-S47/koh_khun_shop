@@ -15,23 +15,22 @@ import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import Swal from "sweetalert2";
 import { useCreateFoodType } from "../hooks/useFoodTypeManage";
 import { FoodTypeCreateDialogProps } from "../types/food_type_manage_type";
-import { CreateFoodTypeRequest, foodTypeSchema } from "../schemas/food-type-schemas";
+import {
+  CreateFoodTypeRequest,
+  foodTypeSchema,
+} from "../schemas/food-type-schemas";
 
 export function FoodTypeCreateDialog({
   shopId,
   open,
   onOpenChange,
 }: FoodTypeCreateDialogProps) {
-  const { mutateAsync: createFoodType, isPending } =
-    useCreateFoodType(shopId);
+  const { mutateAsync: createFoodType, isPending } = useCreateFoodType(shopId);
   const { t } = useTranslation();
 
   const form = useForm({
     defaultValues: {
-      name: {
-        th: "",
-        lo: "",
-      },
+      name: "",
     } satisfies CreateFoodTypeRequest,
 
     validators: {
@@ -41,10 +40,7 @@ export function FoodTypeCreateDialog({
     onSubmit: async ({ value }) => {
       try {
         await createFoodType({
-          name: {
-            th: value.name.th,
-            lo: value.name.lo,
-          },
+          name: value.name,
           shopId,
         });
 
@@ -88,10 +84,8 @@ export function FoodTypeCreateDialog({
           }}
           className="space-y-5"
         >
-          {/* TH */}
-
           <form.Field
-            name="name.th"
+            name="name"
             children={(field) => {
               const error = field.state.meta.errors[0];
 
@@ -115,34 +109,6 @@ export function FoodTypeCreateDialog({
               );
             }}
           />
-
-          {/* LO */}
-
-          {/* <form.Field
-            name="name.lo"
-            children={(field) => {
-              const error = field.state.meta.errors[0];
-
-              return (
-                <div className="space-y-2">
-                  <Label htmlFor="food-type-name-lo">ຊື່ໂຕະ (ລາວ)</Label>
-
-                  <Input
-                    id="food-type-name-lo"
-                    placeholder="ເຊັ່ນ ໂຕະ 1"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    disabled={isPending}
-                  />
-
-                  {error && (
-                    <p className="text-sm text-destructive">{error.message}</p>
-                  )}
-                </div>
-              );
-            }}
-          /> */}
 
           <DialogFooter>
             <Button

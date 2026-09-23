@@ -1,18 +1,16 @@
-import { MultiLangField } from "@/features/translations/types/language-type";
-
 export type FoodType = {
   id: number;
-  name: MultiLangField;
+  name: string;
 };
 
 export type CreateFoodTypePayload = {
-  name: MultiLangField;
+  name: string;
   shopId: number;
 };
 
 export type UpdateFoodTypePayload = {
   id: number;
-  name: MultiLangField;
+  name: string;
   shopId: number;
 };
 

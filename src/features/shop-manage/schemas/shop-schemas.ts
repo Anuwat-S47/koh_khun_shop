@@ -1,11 +1,9 @@
-import { createMultiLangSchema } from "@/features/translations/schemas/languages-schemas";
 import { z } from "zod";
 
 const createBaseShopSchema = (t: (key: string) => string) => {
-  const multiLangSchema = createMultiLangSchema(t);
   return z.object({
-    name: multiLangSchema,
-    address: multiLangSchema,
+    name: z.string().min(1, t("validation.nameRequired")),
+    address: z.string().min(1, t("validation.addressRequired")),
     phone: z
       .string()
       .min(1, t("validation.phoneRequired"))

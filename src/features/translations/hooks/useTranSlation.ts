@@ -1,3 +1,4 @@
+import { en } from "../languages/en";
 import { lo } from "../languages/lo";
 import { th } from "../languages/th";
 import { useLanguageStore } from "../stores/language-store";
@@ -5,6 +6,7 @@ import { useLanguageStore } from "../stores/language-store";
 const translations = {
   th,
   lo,
+  en,
 };
 
 export function useTranslation() {

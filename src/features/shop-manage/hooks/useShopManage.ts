@@ -3,15 +3,14 @@ import {
   CreateShop,
   GetShop,
   GetShopById,
-  RemoveShopImg,
   UpdateShop,
-  UploadShopImg,
 } from "../service/shop-manage-api";
 import { queryClient } from "@/lib/query-client";
 import {
   CreateShopWithImgPayload,
   UpdateShopWithImgPayload,
 } from "../types/shop_manage_type";
+import { RemoveImg, UploadImg } from "@/features/upload-img/service/upload-img-api";
 
 export const shopKeys = {
   all: ["shop"] as const,
@@ -21,7 +20,7 @@ export const shopKeys = {
 export function useCreateShop() {
   return useMutation({
     mutationFn: async (data: CreateShopWithImgPayload) => {
-      const logoUrl = await UploadShopImg(data.logoUrl);
+      const logoUrl = await UploadImg(data.logoUrl, "shop");
 
       return await CreateShop({
         name: data.name,
@@ -52,9 +51,9 @@ export function useUpdateShop() {
 
       if (data.logoUrl && data.logoUrl instanceof File) {
         if (oldLogoUrl) {
-          await RemoveShopImg(oldLogoUrl);
+          await RemoveImg(oldLogoUrl);
         }
-        logoUrl = await UploadShopImg(data.logoUrl);
+        logoUrl = await UploadImg(data.logoUrl, "shop");
       }
 
       return await UpdateShop(data.id, {

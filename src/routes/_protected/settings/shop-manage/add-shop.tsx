@@ -38,15 +38,9 @@ function RouteComponent() {
 
   const form = useForm({
     defaultValues: {
-      name: {
-        th: "",
-        lo: "",
-      },
+      name: "",
       logoUrl: undefined as File | undefined,
-      address: {
-        th: "",
-        lo: "",
-      },
+      address: "",
       phone: "",
     },
     validators: {
@@ -59,15 +53,9 @@ function RouteComponent() {
 
       try {
         await createShop({
-          name: {
-            th: value.name.th,
-            lo: value.name.lo,
-          },
+          name: value.name,
           logoUrl: value.logoUrl,
-          address: {
-            th: value.address.th,
-            lo: value.address.lo,
-          },
+          address: value.address,
           phone: value.phone,
         });
 
@@ -142,8 +130,7 @@ function RouteComponent() {
               )}
             </form.Field>
 
-            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-            <form.Field name="name.th">
+            <form.Field name="name">
               {(field) => (
                 <FormField field={field}>
                   {(hasError) => (
@@ -166,32 +153,7 @@ function RouteComponent() {
               )}
             </form.Field>
 
-            {/* <form.Field name="name.lo">
-                {(field) => (
-                  <FormField field={field}>
-                    {(hasError) => (
-                      <>
-                        <FieldLabel htmlFor={field.name}>
-                          {t.shop.name} (ພາສາລາວ)
-                        </FieldLabel>
-                        <Input
-                          id={field.name}
-                          name={field.name}
-                          type="text"
-                          placeholder={t("shop.namePlaceholderLo")}
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          aria-invalid={hasError}
-                        />
-                      </>
-                    )}
-                  </FormField>
-                )}
-              </form.Field> */}
-            {/* </div> */}
-
-            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-            <form.Field name="address.th">
+            <form.Field name="address">
               {(field) => (
                 <FormField field={field}>
                   {(hasError) => (
@@ -214,31 +176,6 @@ function RouteComponent() {
                 </FormField>
               )}
             </form.Field>
-
-            {/* <form.Field name="address.lo">
-                {(field) => (
-                  <FormField field={field}>
-                    {(hasError) => (
-                      <>
-                        <FieldLabel htmlFor={field.name}>
-                          {t.shop.address} (ພາສາລາວ)
-                        </FieldLabel>
-                        <InputGroup>
-                          <InputGroupTextarea
-                            id={field.name}
-                            name={field.name}
-                            placeholder={t("shop.addressPlaceholderLo")}
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            aria-invalid={hasError}
-                          />
-                        </InputGroup>
-                      </>
-                    )}
-                  </FormField>
-                )}
-              </form.Field> */}
-            {/* </div> */}
 
             <form.Field name="phone">
               {(field) => (

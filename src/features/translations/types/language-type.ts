@@ -1,6 +1,2 @@
-export type Language = "th" | "lo";
-
-export interface MultiLangField {
-  th: string;
-  lo: string;
-}
+export const Languages = ["th", "lo", "en"] as const;
+export type Language = (typeof Languages)[number];

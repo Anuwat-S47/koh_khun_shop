@@ -1,9 +1,7 @@
-import { MultiLangField } from "@/features/translations/types/language-type";
-
 export type CreateShopPayload = {
-  name: MultiLangField;
+  name: string;
   logoUrl: string;
-  address: MultiLangField;
+  address: string;
   phone: string;
 };
 
@@ -13,9 +11,9 @@ export type CreateShopWithImgPayload = Omit<CreateShopPayload, "logoUrl"> & {
 
 export type ShopType = {
   id: number;
-  name: MultiLangField;
+  name: string;
   logoUrl: string;
-  address: MultiLangField;
+  address: string;
   phone: string;
   createdAt: string;
   createBy: string;
@@ -23,16 +21,16 @@ export type ShopType = {
 
 export interface UpdateShopPayload {
   id: number;
-  name: MultiLangField;
-  address: MultiLangField;
+  name: string;
+  address: string;
   phone: string;
   logoUrl?: string;
 }
 
 export type UpdateShopWithImgPayload = {
   id: number;
-  name: MultiLangField;
-  address: MultiLangField;
+  name: string;
+  address: string;
   phone: string;
   logoUrl: File | null;
 };

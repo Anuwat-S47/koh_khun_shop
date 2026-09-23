@@ -12,15 +12,12 @@ export const Route = createFileRoute("/_protected/settings/shop-manage/")({
     showBackButton: false,
     className: "w-full max-w-2xl",
   },
-
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { data: shop, isLoading } = useGetShop();
   const navigate = useNavigate();
-
-  const language = useLanguageStore((state) => state.language);
 
   const { t } = useTranslation();
 
@@ -46,7 +43,7 @@ function RouteComponent() {
               {/* Logo */}
               <img
                 src={s.logoUrl}
-                alt={s.name[language]}
+                alt={s.name}
                 className="mx-auto h-28 w-28 shrink-0 rounded-xl border border-slate-100 object-cover shadow-sm sm:mx-0"
               />
 
@@ -58,7 +55,7 @@ function RouteComponent() {
                     {t.shop.name}:
                   </span>
 
-                  <span className="wrap-break-word">{s.name[language]}</span>
+                  <span className="wrap-break-word">{s.name}</span>
                 </h2>
 
                 {/* เบอร์โทร */}
@@ -77,7 +74,7 @@ function RouteComponent() {
                   </span>
 
                   <p className="min-w-0 flex-1 whitespace-pre-line font-medium leading-relaxed text-slate-800 wrap-break-word">
-                    {s.address[language]}
+                    {s.address}
                   </p>
                 </div>
               </div>

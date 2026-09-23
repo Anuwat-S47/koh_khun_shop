@@ -16,6 +16,12 @@ export const th = {
     somethingWentWrong: "เกิดข้อผิดพลาดในการดำเนินการ",
   },
 
+  pagination: {
+    prev: "ก่อนหน้า",
+    page: "หน้า",
+    next: "ถัดไป",
+  },
+
   shop: {
     title: "ตั้งค่าข้อมูลร้านค้า",
     addShop: "เพิ่มร้าน",
@@ -42,10 +48,18 @@ export const th = {
     addFood: "เพิ่มอาหาร",
     name: "ชื่ออาหาร",
     price: "ราคา",
-    type: "ประเภทสินค้า",
+    type: "ประเภท",
     description: "เพิ่มและจัดการสินค้าภายในร้าน",
     manage: "จัดการสินค้า",
     count: "รายการ",
+    foodList: "รายการอาหาร",
+    all: "ทั้งหมด",
+    searchPlaceholder: "ค้นหาชื่ออาหาร...",
+    notFound: "ไม่พบอาหารที่ค้นหา",
+    empty: "ยังไม่มีอาหาร",
+    noImage: "ไม่มีรูป",
+    baht: "บาท",
+    addedAt: "เพิ่มเมื่อ",
   },
 
   foodType: {

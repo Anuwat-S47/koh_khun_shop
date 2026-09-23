@@ -164,7 +164,7 @@ export function ShopTableManager({ shopId }: ShopTableManagerProps) {
                       <TableCell>{tables.length - index}</TableCell>
 
                       <TableCell className="font-medium">
-                        {table.name.th}
+                        {table.name}
                       </TableCell>
 
                       <TableCell>

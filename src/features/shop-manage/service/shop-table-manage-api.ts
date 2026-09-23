@@ -21,10 +21,7 @@ export const GetShopTable = async (shopId: number) => {
 
 export const CreateShopTable = async (data: CreateShopTablePayload) => {
   const { error } = await supabase.from("shop_table").insert({
-    name: {
-      th: data.name.th,
-      lo: data.name.lo || data.name.th,
-    },
+    name: data.name,
     shop_id: data.shopId,
   });
 

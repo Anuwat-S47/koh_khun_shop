@@ -19,10 +19,7 @@ export const GetFoodTypes = async (shopId: number) => {
 export const CreateFoodType = async (data: CreateFoodTypePayload) => {
   const { error } = await supabase.from("food_type").insert([
     {
-      name: {
-        th: data.name.th,
-        lo: data.name.lo || data.name.th,
-      },
+      name: data.name,
       shop_id: data.shopId,
     },
   ]);

@@ -16,6 +16,12 @@ export const lo = {
     somethingWentWrong: "ເກີດຂໍ້ຜິດພາດ",
   },
 
+  pagination: {
+    prev: "ກ່ອນໜ້າ",
+    page: "ໜ້າ",
+    next: "ຖັດໄປ",
+  },
+
   shop: {
     title: "ຕັ້ງຄ່າຂໍ້ມູນຮ້ານຄ້າ",
     addShop: "ເພີ່ມຮ້ານ",
@@ -47,6 +53,14 @@ export const lo = {
     price: "ລາຄາ",
     type: "ປະເພດສິນຄ້າ",
     count: "ລາຍການ",
+    foodList: "ລາຍການອາຫານ",
+    all: "ທັງໝົດ",
+    searchPlaceholder: "ຄົ້ນຫາຊື່ອາຫານ...",
+    notFound: "ບໍ່ພົບອາຫານທີ່ຄົ້ນຫາ",
+    empty: "ຍັງບໍ່ມີອາຫານ",
+    noImage: "ບໍ່ມີຮູບ",
+    baht: "ບາດ",
+    addedAt: "ເພີ່ມເມື່ອ",
   },
 
   foodType: {

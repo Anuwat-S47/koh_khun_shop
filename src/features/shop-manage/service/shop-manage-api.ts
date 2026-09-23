@@ -1,62 +1,8 @@
 import { supabase } from "@/lib/supabase";
-import { CreateShopPayload, UpdateShopPayload } from "../types/shop_manage_type";
-import { v4 as uuidv4 } from "uuid";
-
-export const getStoragePathFromUrl = (publicUrl: string) => {
-  if (!publicUrl) return null;
-
-  const parts = publicUrl.split("/Shop_img/");
-  if (parts.length > 1) {
-    return parts[1].split("?")[0];
-  }
-  return null;
-};
-
-export const RemoveShopImg = async (logoUrl: string) => {
-  const filePath = getStoragePathFromUrl(logoUrl);
-
-  if (!filePath) {
-    console.warn("The storage path could not be found from the specified URL.");
-    return;
-  }
-
-  const { data, error } = await supabase.storage
-    .from("Shop_img")
-    .remove([filePath]);
-
-  if (error) {
-    console.error("Supabase Error:", error);
-    throw new Error(error.message);
-  }
-
-  return data;
-};
-
-export const UploadShopImg = async (img: File) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("User not authenticated");
-  }
-
-  const fileName = `${user.id}/${uuidv4()}-${img.name}`;
-
-  const { error } = await supabase.storage
-    .from("Shop_img")
-    .upload(fileName, img);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("Shop_img").getPublicUrl(fileName);
-
-  return publicUrl;
-};
+import {
+  CreateShopPayload,
+  UpdateShopPayload,
+} from "../types/shop_manage_type";
 
 export const CreateShop = async (data: CreateShopPayload) => {
   const {
@@ -69,15 +15,9 @@ export const CreateShop = async (data: CreateShopPayload) => {
   }
 
   const { error } = await supabase.from("shop").insert({
-    name: {
-      th: data.name.th,
-      lo: data.name.lo || data.name.th,
-    },
+    name: data.name,
     logo_url: data.logoUrl,
-    address: {
-      th: data.address.th,
-      lo: data.address.lo || data.address.th,
-    },
+    address: data.address,
     phone: data.phone,
     create_by: user.id,
   });
@@ -93,18 +33,14 @@ export const CreateShop = async (data: CreateShopPayload) => {
 };
 
 export const UpdateShop = async (id: number, data: UpdateShopPayload) => {
+  await VerifyShop(id);
+
   const { error } = await supabase
     .from("shop")
     .update({
-    name: {
-      th: data.name.th,
-      lo: data.name.lo || data.name.th,
-    },
-    logo_url: data.logoUrl,
-    address: {
-      th: data.address.th,
-      lo: data.address.lo || data.address.th,
-    },
+      name: data.name,
+      logo_url: data.logoUrl,
+      address: data.address,
       phone: data.phone,
     })
     .eq("id", id);
@@ -164,4 +100,38 @@ export const GetShop = async () => {
     phone: shop.phone,
     createBy: shop.create_by,
   }));
+};
+
+export const VerifyShop = async (shopId: number) => {
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    console.error("Auth Error:", authError);
+    throw new Error(authError.message);
+  }
+
+  if (!user) {
+    throw new Error("กรุณาเข้าสู่ระบบ");
+  }
+
+  const { data, error } = await supabase
+    .from("shop")
+    .select("id")
+    .eq("id", shopId)
+    .eq("create_by", user.id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Supabase Error:", error);
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("ไม่พบร้านค้าหรือคุณไม่มีสิทธิ์เข้าถึงร้านค้านี้");
+  }
+
+  return data;
 };

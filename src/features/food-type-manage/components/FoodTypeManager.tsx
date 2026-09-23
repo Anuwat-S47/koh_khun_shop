@@ -156,7 +156,7 @@ export function FoodTypeManager({ shopId }: { shopId: number }) {
                       <TableCell>{foodTypes.length - index}</TableCell>
 
                       <TableCell className="font-medium">
-                        {foodType.name.th}
+                        {foodType.name}
                       </TableCell>
 
                       <TableCell>

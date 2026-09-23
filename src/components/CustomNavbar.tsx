@@ -58,9 +58,7 @@ function CustomNavbar() {
 
         <Separator orientation="vertical" className="h-4" />
 
-        <span className="font-semibold">
-          Koh Khun Shop
-        </span>
+        <span className="font-semibold">Koh Khun Shop</span>
       </div>
 
       <div className="flex items-center gap-4">
@@ -69,32 +67,28 @@ function CustomNavbar() {
         ) : user ? (
           <Menubar>
             <MenubarMenu>
-              <MenubarTrigger>
-                {user.email}
-              </MenubarTrigger>
+              <MenubarTrigger>{user.email}</MenubarTrigger>
 
               <MenubarContent align="end">
                 <MenubarGroup>
                   {/* Language */}
                   <MenubarSub>
-                    <MenubarSubTrigger>
-                      {t.language.title}
-                    </MenubarSubTrigger>
+                    <MenubarSubTrigger>{t.language.title}</MenubarSubTrigger>
 
                     <MenubarSubContent>
                       <MenubarRadioGroup
                         value={language}
                         onValueChange={(value) =>
-                          setLanguage(value as "th" | "lo")
+                          setLanguage(value as "th" | "lo" | "en")
                         }
                       >
-                        <MenubarRadioItem value="th">
-                          🇹🇭 ไทย
+                        <MenubarRadioItem value="en">
+                          🇬🇧 English
                         </MenubarRadioItem>
 
-                        <MenubarRadioItem value="lo">
-                          🇱🇦 ລາວ
-                        </MenubarRadioItem>
+                        <MenubarRadioItem value="th">🇹🇭 ไทย</MenubarRadioItem>
+
+                        <MenubarRadioItem value="lo">🇱🇦 ລາວ</MenubarRadioItem>
                       </MenubarRadioGroup>
                     </MenubarSubContent>
                   </MenubarSub>
@@ -102,13 +96,8 @@ function CustomNavbar() {
                   <MenubarSeparator />
 
                   {/* Logout */}
-                  <MenubarItem
-                    disabled={isPending}
-                    onClick={handleLogout}
-                  >
-                    {isPending
-                      ? t.common.loading
-                      : t.auth.logout}
+                  <MenubarItem disabled={isPending} onClick={handleLogout}>
+                    {isPending ? t.common.loading : t.auth.logout}
                   </MenubarItem>
                 </MenubarGroup>
               </MenubarContent>
@@ -116,9 +105,7 @@ function CustomNavbar() {
           </Menubar>
         ) : (
           <Link to="/login">
-            <Button variant="ghost">
-              {t.auth.login}
-            </Button>
+            <Button variant="ghost">{t.auth.login}</Button>
           </Link>
         )}
       </div>

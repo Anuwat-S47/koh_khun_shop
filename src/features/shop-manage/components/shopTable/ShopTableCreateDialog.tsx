@@ -31,10 +31,7 @@ export function ShopTableCreateDialog({
 
   const form = useForm({
     defaultValues: {
-      name: {
-        th: "",
-        lo: "",
-      },
+      name: "",
     } satisfies CreateShopTableRequest,
 
     validators: {
@@ -44,10 +41,7 @@ export function ShopTableCreateDialog({
     onSubmit: async ({ value }) => {
       try {
         await createShopTable({
-          name: {
-            th: value.name.th,
-            lo: value.name.lo,
-          },
+          name: value.name,
           shopId,
         });
 
@@ -94,16 +88,16 @@ export function ShopTableCreateDialog({
           {/* TH */}
 
           <form.Field
-            name="name.th"
+            name="name"
             children={(field) => {
               const error = field.state.meta.errors[0];
 
               return (
                 <div className="space-y-2">
-                  <Label htmlFor="table-name-th">{t.table.name}</Label>
+                  <Label htmlFor="table-name">{t.table.name}</Label>
 
                   <Input
-                    id="table-name-th"
+                    id="table-name"
                     placeholder={t.table.tablePlaceholder}
                     value={field.state.value}
                     onBlur={field.handleBlur}
@@ -118,34 +112,6 @@ export function ShopTableCreateDialog({
               );
             }}
           />
-
-          {/* LO */}
-
-          {/* <form.Field
-            name="name.lo"
-            children={(field) => {
-              const error = field.state.meta.errors[0];
-
-              return (
-                <div className="space-y-2">
-                  <Label htmlFor="table-name-lo">ຊື່ໂຕະ (ລາວ)</Label>
-
-                  <Input
-                    id="table-name-lo"
-                    placeholder="ເຊັ່ນ ໂຕະ 1"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    disabled={isPending}
-                  />
-
-                  {error && (
-                    <p className="text-sm text-destructive">{error.message}</p>
-                  )}
-                </div>
-              );
-            }}
-          /> */}
 
           <DialogFooter>
             <Button

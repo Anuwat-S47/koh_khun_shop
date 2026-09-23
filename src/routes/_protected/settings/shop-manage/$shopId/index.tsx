@@ -3,6 +3,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShopTableManager } from "@/features/shop-manage/components/ShopTableManager";
 import { FoodTypeManager } from "@/features/food-type-manage/components/FoodTypeManager";
+import { VerifyShop } from "@/features/shop-manage/service/shop-manage-api";
+import { FoodManager } from "@/features/food-manage/components/FoodManager";
 
 export const Route = createFileRoute(
   "/_protected/settings/shop-manage/$shopId/",
@@ -12,6 +14,15 @@ export const Route = createFileRoute(
     description: "shop.manageDescription",
     className: "w-full max-w-2xl",
     showBackButton: true,
+  },
+  beforeLoad: async ({ params }) => {
+    const shopId = Number(params.shopId);
+
+    if (!Number.isInteger(shopId) || shopId <= 0) {
+      throw new Error("Invalid shop ID");
+    }
+
+    await VerifyShop(shopId);
   },
   component: RouteComponent,
 });
@@ -36,9 +47,9 @@ function RouteComponent() {
         <TabsContent value="food-type" className="mt-4">
           <FoodTypeManager shopId={Number(shopId)} />
         </TabsContent>
-        
+
         <TabsContent value="food" className="mt-4">
-          TestFood
+          <FoodManager shopId={Number(shopId)} />
         </TabsContent>
       </Tabs>
     </div>
