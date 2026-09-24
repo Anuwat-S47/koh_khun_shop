@@ -37,7 +37,7 @@ export function ProductCard({
       {/* รูป / ราคา */}
       <div className="flex justify-between items-start gap-2">
         <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-xl">
-          🍲
+          รูป
         </div>
 
         <span className="bg-amber-50 text-amber-700 font-semibold px-2.5 py-1 rounded-md text-xs">

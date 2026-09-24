@@ -1,10 +1,5 @@
 import { SidebarMenu } from "@/types/menu-types";
-import {
-  Home,
-  Settings,
-  ShoppingBag,
-  SlidersHorizontal,
-} from "lucide-react";
+import { Home, Settings, ShoppingBag, SlidersHorizontal } from "lucide-react";
 
 export const sidebarMenu: SidebarMenu[] = [
   {
