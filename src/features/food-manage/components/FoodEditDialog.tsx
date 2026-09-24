@@ -21,18 +21,13 @@ import { useEffect, useState } from "react";
 
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 
-import {
-  useGetFoodById,
-  useUpdateFood,
-} from "../hooks/useFoodManage";
+import { useGetFoodById, useUpdateFood } from "../hooks/useFoodManage";
 
 import { useGetFoodTypes } from "@/features/food-type-manage/hooks/useFoodTypeManage";
 
 import { FoodTypeSelector } from "@/features/food-type-manage/components/FoodTypeSelector";
 
-import {
-  updateFoodSchema,
-} from "../schemas/food-schemas";
+import { updateFoodSchema } from "../schemas/food-schemas";
 import { UpdateFoodRequest } from "../types/food_manage_type";
 
 type FoodEditDialogProps = {
@@ -50,20 +45,15 @@ export function FoodEditDialog({
 }: FoodEditDialogProps) {
   const { t } = useTranslation();
 
-  const {
-    data: food,
-    isLoading: isFoodLoading,
-  } = useGetFoodById(foodId, shopId);
+  const { data: food, isLoading: isFoodLoading } = useGetFoodById(
+    foodId,
+    shopId,
+  );
 
-  const {
-    mutateAsync: updateFood,
-    isPending: updatingFood,
-  } = useUpdateFood();
+  const { mutateAsync: updateFood, isPending: updatingFood } = useUpdateFood();
 
-  const {
-    data: foodTypes,
-    isLoading: isFoodTypeLoading,
-  } = useGetFoodTypes(shopId);
+  const { data: foodTypes, isLoading: isFoodTypeLoading } =
+    useGetFoodTypes(shopId);
 
   const safeFoodTypes = foodTypes ?? [];
 
@@ -111,9 +101,7 @@ export function FoodEditDialog({
         await Swal.fire({
           title: "เกิดข้อผิดพลาด",
           text:
-            error instanceof Error
-              ? error.message
-              : "ไม่สามารถแก้ไขอาหารได้",
+            error instanceof Error ? error.message : "ไม่สามารถแก้ไขอาหารได้",
           icon: "error",
           confirmButtonText: "ตกลง",
         });
@@ -121,9 +109,6 @@ export function FoodEditDialog({
     },
   });
 
-  /**
-   * โหลดข้อมูลอาหารเข้า Form
-   */
   useEffect(() => {
     if (!food || !open) return;
 
@@ -135,9 +120,6 @@ export function FoodEditDialog({
     setPreviewUrl(food.imgUrl ?? null);
   }, [food, open]);
 
-  /**
-   * Cleanup object URL
-   */
   useEffect(() => {
     return () => {
       if (previewUrl?.startsWith("blob:")) {
@@ -155,15 +137,9 @@ export function FoodEditDialog({
     onOpenChange(value);
   };
 
-  const handleImageChange = (
-    field: any,
-    file: File | undefined,
-  ) => {
+  const handleImageChange = (field: any, file: File | undefined) => {
     if (!file) return;
 
-    /**
-     * ถ้ามี blob URL เดิม ให้ revoke ก่อน
-     */
     if (previewUrl?.startsWith("blob:")) {
       URL.revokeObjectURL(previewUrl);
     }
@@ -179,7 +155,7 @@ export function FoodEditDialog({
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-lg">
           <div className="py-10 text-center text-muted-foreground">
-            กำลังโหลดข้อมูลอาหาร...
+            {t.food.loadingFood}
           </div>
         </DialogContent>
       </Dialog>
@@ -190,13 +166,9 @@ export function FoodEditDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>
-            {t.food.editFood}
-          </DialogTitle>
+          <DialogTitle>{t.food.editFood}</DialogTitle>
 
-          <DialogDescription>
-            {t.food.editFoodDescription}
-          </DialogDescription>
+          <DialogDescription>{t.food.editFoodDescription}</DialogDescription>
         </DialogHeader>
 
         <form
@@ -210,7 +182,6 @@ export function FoodEditDialog({
           <FieldGroup>
             <FieldSet>
               <FieldGroup>
-
                 {/* Image */}
                 <form.Field
                   name="imgUrl"
@@ -218,9 +189,7 @@ export function FoodEditDialog({
                     <FormField field={field}>
                       {() => (
                         <div className="space-y-2">
-                          <Label>
-                            {t.food.imgAlt}
-                          </Label>
+                          <Label>{t.food.imgAlt}</Label>
 
                           {previewUrl && (
                             <div className="flex justify-center my-3">
@@ -240,18 +209,14 @@ export function FoodEditDialog({
                             type="file"
                             accept="image/png,image/jpeg,image/webp"
                             onChange={(e) => {
-                              const file =
-                                e.target.files?.[0];
+                              const file = e.target.files?.[0];
 
-                              handleImageChange(
-                                field,
-                                file,
-                              );
+                              handleImageChange(field, file);
                             }}
                           />
 
                           <p className="text-xs text-muted-foreground">
-                            หากไม่เลือกไฟล์ใหม่ ระบบจะใช้รูปเดิม
+                            {t.food.keepImageHint}
                           </p>
                         </div>
                       )}
@@ -266,20 +231,12 @@ export function FoodEditDialog({
                     <FormField field={field}>
                       {(hasError) => (
                         <div className="space-y-2">
-                          <Label>
-                            {t.food.name}
-                          </Label>
+                          <Label>{t.food.name}</Label>
 
                           <Input
                             value={field.state.value}
-                            onChange={(e) =>
-                              field.handleChange(
-                                e.target.value,
-                              )
-                            }
-                            placeholder={
-                              t.food.namePlaceholder
-                            }
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder={t.food.namePlaceholder}
                             aria-invalid={hasError}
                           />
                         </div>
@@ -296,9 +253,7 @@ export function FoodEditDialog({
                       {() => (
                         <FoodTypeSelector
                           value={field.state.value}
-                          onChange={(id) =>
-                            field.handleChange(id)
-                          }
+                          onChange={(id) => field.handleChange(id)}
                           foodTypes={safeFoodTypes}
                           isLoading={isFoodTypeLoading}
                           t={t}
@@ -312,33 +267,14 @@ export function FoodEditDialog({
                 <form.Field
                   name="price"
                   children={(field) => {
-                    const handleAdjustPrice = (
-                      amount: number,
-                    ) => {
-                      const currentValue =
-                        Number(field.state.value) || 0;
-
-                      const newValue = Math.max(
-                        0,
-                        currentValue + amount,
-                      );
-
+                    const handleAdjustPrice = (amount: number) => {
+                      const currentValue = Number(field.state.value) || 0;
+                      const newValue = Math.max(0, currentValue + amount);
                       field.handleChange(newValue);
                     };
 
-                    const negativeSteps = [
-                      -100,
-                      -50,
-                      -10,
-                      -1,
-                    ];
-
-                    const positiveSteps = [
-                      1,
-                      10,
-                      50,
-                      100,
-                    ];
+                    const negativeSteps = [-100, -50, -10, -1];
+                    const positiveSteps = [1, 10, 50, 100];
 
                     return (
                       <FormField field={field}>
@@ -350,8 +286,7 @@ export function FoodEditDialog({
                               </Label>
 
                               <span className="text-xs text-muted-foreground">
-                                {t.common.currency} (
-                                {t.food.baht})
+                                {t.common.currency} ({t.food.baht})
                               </span>
                             </div>
 
@@ -366,16 +301,12 @@ export function FoodEditDialog({
                                 min="0"
                                 placeholder="0.00"
                                 className="pl-8 pr-12 font-mono text-base font-semibold"
-                                value={
-                                  field.state.value ?? ""
-                                }
+                                value={field.state.value ?? ""}
                                 onChange={(e) =>
                                   field.handleChange(
                                     e.target.value === ""
                                       ? 0
-                                      : Number(
-                                          e.target.value,
-                                        ),
+                                      : Number(e.target.value),
                                   )
                                 }
                                 aria-invalid={hasError}
@@ -392,49 +323,35 @@ export function FoodEditDialog({
                               </span>
 
                               <div className="flex flex-wrap items-center gap-1">
-                                {negativeSteps.map(
-                                  (step) => (
-                                    <button
-                                      key={step}
-                                      type="button"
-                                      onClick={() =>
-                                        handleAdjustPrice(
-                                          step,
-                                        )
-                                      }
-                                      className="text-xs font-medium px-2 py-1 rounded border border-destructive/20 bg-destructive/5 text-destructive hover:bg-destructive/15 active:scale-95 transition-all"
-                                    >
-                                      {step}
-                                    </button>
-                                  ),
-                                )}
+                                {negativeSteps.map((step) => (
+                                  <button
+                                    key={step}
+                                    type="button"
+                                    onClick={() => handleAdjustPrice(step)}
+                                    className="text-xs font-medium px-2 py-1 rounded border border-destructive/20 bg-destructive/5 text-destructive hover:bg-destructive/15 active:scale-95 transition-all"
+                                  >
+                                    {step}
+                                  </button>
+                                ))}
 
                                 <button
                                   type="button"
-                                  onClick={() =>
-                                    field.handleChange(0)
-                                  }
+                                  onClick={() => field.handleChange(0)}
                                   className="text-xs font-semibold px-2.5 py-1 rounded border border-input bg-muted hover:bg-accent active:scale-95 transition-all"
                                 >
                                   0
                                 </button>
 
-                                {positiveSteps.map(
-                                  (step) => (
-                                    <button
-                                      key={step}
-                                      type="button"
-                                      onClick={() =>
-                                        handleAdjustPrice(
-                                          step,
-                                        )
-                                      }
-                                      className="text-xs font-medium px-2 py-1 rounded border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95 transition-all shadow-sm"
-                                    >
-                                      +{step}
-                                    </button>
-                                  ),
-                                )}
+                                {positiveSteps.map((step) => (
+                                  <button
+                                    key={step}
+                                    type="button"
+                                    onClick={() => handleAdjustPrice(step)}
+                                    className="text-xs font-medium px-2 py-1 rounded border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95 transition-all shadow-sm"
+                                  >
+                                    +{step}
+                                  </button>
+                                ))}
                               </div>
                             </div>
                           </div>
@@ -455,16 +372,8 @@ export function FoodEditDialog({
                   {t.common.cancel}
                 </Button>
 
-                <Button
-                  type="submit"
-                  disabled={
-                    updatingFood ||
-                    isFoodLoading
-                  }
-                >
-                  {updatingFood
-                    ? "กำลังบันทึก..."
-                    : t.food.editFood}
+                <Button type="submit" disabled={updatingFood || isFoodLoading}>
+                  {updatingFood ? t.common.saving : t.food.editFood}
                 </Button>
               </DialogFooter>
             </FieldSet>
@@ -474,7 +383,3 @@ export function FoodEditDialog({
     </Dialog>
   );
 }
-
-
-
-

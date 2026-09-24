@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
 import AuthProvider from "@/components/AuthProvider";
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  Link,
+  Outlet,
+} from "@tanstack/react-router";
+import { MyRouterContext } from "@/App";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootLayout,
   notFoundComponent: () => {
     return (

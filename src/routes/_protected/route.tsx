@@ -1,5 +1,6 @@
 import {
   createFileRoute,
+  isRedirect,
   Outlet,
   redirect,
   useMatches,
@@ -8,15 +9,14 @@ import CustomNavbar from "@/components/CustomNavbar";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import CustomSidebar from "@/components/CustomSidebar";
-import { queryClient } from "@/lib/query-client";
 import PageLayout from "@/components/layout/PageLayout";
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import { GetMe } from "@/features/auth/services/user-api";
 
 export const Route = createFileRoute("/_protected")({
-  beforeLoad: async () => {
+  beforeLoad: async ({ context }) => {
     try {
-      const user = await queryClient.ensureQueryData({
+      const user = await context.queryClient.ensureQueryData({
         queryKey: ["me"],
         queryFn: GetMe,
       });
@@ -25,6 +25,10 @@ export const Route = createFileRoute("/_protected")({
         user,
       };
     } catch (error) {
+      if (isRedirect(error)) {
+        throw error;
+      }
+
       throw redirect({
         to: "/login",
       });

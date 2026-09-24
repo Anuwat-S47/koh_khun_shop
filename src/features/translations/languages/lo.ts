@@ -69,6 +69,8 @@ export const lo = {
     adding: "ກຳລັງເພີ່ມ...",
     editFood: "ແກ້ໄຂອາຫານ",
     editFoodDescription: "ແກ້ໄຂຂໍ້ມູນລາຍການອາຫານ",
+    keepImageHint: "หากບໍ່ເລືອກໄຟລ໌ໃໝ່ ລະບົບຈະໃຊ້ຮູບເກົ່າ",
+    loadingFood: "ກຳລັງໂຫຼດຂໍ້ມູນອາຫານ...",
   },
 
   foodType: {

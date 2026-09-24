@@ -66,6 +66,8 @@ export const th = {
     adding: "กำลังเพิ่ม...",
     editFood: "แก้ไขอาหาร",
     editFoodDescription: "แก้ไขข้อมูลรายการอาหาร",
+    keepImageHint: "หากไม่เลือกไฟล์ใหม่ ระบบจะใช้รูปเดิม",
+    loadingFood: "กำลังโหลดข้อมูลอาหาร...",
   },
 
   foodType: {

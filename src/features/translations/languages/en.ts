@@ -69,6 +69,8 @@ export const en = {
     adding: "Adding...",
     editFood: "Edit Food",
     editFoodDescription: "Edit food item details",
+    keepImageHint: "If no new file is selected, the current image will be kept",
+    loadingFood: "Loading food data...",
   },
 
   foodType: {

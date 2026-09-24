@@ -135,3 +135,13 @@ export const VerifyShop = async (shopId: number) => {
 
   return data;
 };
+
+export const checkUserHasShop = async (userId: string) => {
+  const { data, error } = await supabase
+    .from("shop")
+    .select("id")
+    .eq("create_by", userId)
+    .maybeSingle();
+
+  return !!data;
+};
