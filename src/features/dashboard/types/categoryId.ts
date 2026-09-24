@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export type CategoryId = "all" | number;
 
 export interface Product {
@@ -16,19 +15,6 @@ export type FoodType = {
   name: string;
 };
 
-=======
-export type CategoryId = 'all' | 'main' | 'soup' | 'appetizer' | 'drink';
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  category: CategoryId;
-  categoryName: string;
-  image?: string;
-}
-
->>>>>>> 506d95e (yang mai sed)
 export interface CartItem extends Product {
   quantity: number;
 }
@@ -36,8 +22,4 @@ export interface CartItem extends Product {
 export interface TableInfo {
   tableNumber: string;
   status: string;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 506d95e (yang mai sed)
