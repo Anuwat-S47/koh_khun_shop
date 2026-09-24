@@ -74,7 +74,15 @@ export const GetFoods = async (
 export const GetFoodById = async (id: number, shopId: number) => {
   const { data, error } = await supabase
     .from("food")
-    .select("*")
+    .select(
+      `
+      *,
+      type:food_type (
+        id,
+        name
+      )
+    `,
+    )
     .eq("id", id)
     .eq("shop_id", shopId)
     .single();

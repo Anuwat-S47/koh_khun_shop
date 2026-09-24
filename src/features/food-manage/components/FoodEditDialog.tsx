@@ -6,48 +6,61 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "@tanstack/react-form";
-import { useCreateFood } from "../hooks/useFoodManage";
-import Swal from "sweetalert2";
-import { useGetFoodTypes } from "@/features/food-type-manage/hooks/useFoodTypeManage";
-import { useEffect, useState } from "react";
-import { useTranslation } from "@/features/translations/hooks/useTranSlation";
-import { CreateFoodRequest, createFoodSchema } from "../schemas/food-schemas";
+
 import { FieldGroup, FieldSet } from "@/components/ui/field";
 import FormField from "@/components/FormField";
+
+import { useForm } from "@tanstack/react-form";
+import Swal from "sweetalert2";
+
+import { useEffect, useState } from "react";
+
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
+
+import { useGetFoodById, useUpdateFood } from "../hooks/useFoodManage";
+
+import { useGetFoodTypes } from "@/features/food-type-manage/hooks/useFoodTypeManage";
+
 import { FoodTypeSelector } from "@/features/food-type-manage/components/FoodTypeSelector";
 
-type FoodCreateDialogProps = {
+import { updateFoodSchema } from "../schemas/food-schemas";
+import { UpdateFoodRequest } from "../types/food_manage_type";
+
+type FoodEditDialogProps = {
+  foodId: number;
   shopId: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
-export function FoodCreateDialog({
+export function FoodEditDialog({
+  foodId,
   shopId,
   open,
   onOpenChange,
-}: FoodCreateDialogProps) {
-  const { mutateAsync: createFood, isPending: creatingFood } = useCreateFood();
+}: FoodEditDialogProps) {
+  const { t } = useTranslation();
+
+  const { data: food, isLoading: isFoodLoading } = useGetFoodById(
+    foodId,
+    shopId,
+  );
+
+  const { mutateAsync: updateFood, isPending: updatingFood } = useUpdateFood();
+
   const { data: foodTypes, isLoading: isFoodTypeLoading } =
     useGetFoodTypes(shopId);
+
   const safeFoodTypes = foodTypes ?? [];
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const { t } = useTranslation();
 
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-
-  const defaultValues: CreateFoodRequest = {
+  const defaultValues: UpdateFoodRequest = {
+    id: foodId,
     shopId,
     name: "",
     price: 0,
@@ -57,36 +70,38 @@ export function FoodCreateDialog({
 
   const form = useForm({
     defaultValues,
+
     validators: {
-      onSubmit: createFoodSchema(t),
+      onSubmit: updateFoodSchema(t),
     },
 
     onSubmit: async ({ value }) => {
       try {
-        await createFood({
-          shopId,
-          name: value.name,
-          price: value.price,
-          typeId: value.typeId,
-          imgUrl: value.imgUrl,
+        await updateFood({
+          oldImgUrl: food?.imgUrl ?? null,
+          data: {
+            id: foodId,
+            shopId,
+            name: value.name,
+            price: value.price,
+            typeId: value.typeId,
+            imgUrl: value.imgUrl,
+          },
         });
 
         await Swal.fire({
           title: "สำเร็จ",
-          text: "เพิ่มอาหารเรียบร้อยแล้ว",
+          text: "แก้ไขอาหารเรียบร้อยแล้ว",
           icon: "success",
           confirmButtonText: "ตกลง",
         });
 
-        form.reset();
-        setPreviewUrl(null);
-
-        // onOpenChange(false);
+        handleClose(false);
       } catch (error) {
         await Swal.fire({
           title: "เกิดข้อผิดพลาด",
           text:
-            error instanceof Error ? error.message : "ไม่สามารถเพิ่มอาหารได้",
+            error instanceof Error ? error.message : "ไม่สามารถแก้ไขอาหารได้",
           icon: "error",
           confirmButtonText: "ตกลง",
         });
@@ -94,28 +109,72 @@ export function FoodCreateDialog({
     },
   });
 
+  useEffect(() => {
+    if (!food || !open) return;
+
+    form.setFieldValue("name", food.name ?? "");
+    form.setFieldValue("price", food.price ?? 0);
+    form.setFieldValue("typeId", food.typeId ?? 0);
+    form.setFieldValue("imgUrl", undefined);
+
+    setPreviewUrl(food.imgUrl ?? null);
+  }, [food, open]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl?.startsWith("blob:")) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   const handleClose = (value: boolean) => {
     if (!value) {
       form.reset();
+      setPreviewUrl(null);
     }
 
     onOpenChange(value);
   };
 
+  const handleImageChange = (field: any, file: File | undefined) => {
+    if (!file) return;
+
+    if (previewUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    field.handleChange(file);
+
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+  };
+
+  if (isFoodLoading) {
+    return (
+      <Dialog open={open} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-lg">
+          <div className="py-10 text-center text-muted-foreground">
+            {t.food.loadingFood}
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{t.food.addFood}</DialogTitle>
+          <DialogTitle>{t.food.editFood}</DialogTitle>
 
-          <DialogDescription>{t.food.addNewFood}</DialogDescription>
+          <DialogDescription>{t.food.editFoodDescription}</DialogDescription>
         </DialogHeader>
 
         <form
           onSubmit={(event) => {
             event.preventDefault();
             event.stopPropagation();
-
             form.handleSubmit();
           }}
           className="space-y-4"
@@ -128,7 +187,7 @@ export function FoodCreateDialog({
                   name="imgUrl"
                   children={(field) => (
                     <FormField field={field}>
-                      {(hasError) => (
+                      {() => (
                         <div className="space-y-2">
                           <Label>{t.food.imgAlt}</Label>
 
@@ -152,39 +211,35 @@ export function FoodCreateDialog({
                             onChange={(e) => {
                               const file = e.target.files?.[0];
 
-                              if (!file) return;
-
-                              field.handleChange(file);
-                              const url = URL.createObjectURL(file);
-                              setPreviewUrl(url);
+                              handleImageChange(field, file);
                             }}
-                            aria-invalid={hasError}
                           />
+
+                          <p className="text-xs text-muted-foreground">
+                            {t.food.keepImageHint}
+                          </p>
                         </div>
                       )}
                     </FormField>
                   )}
                 />
 
+                {/* Name */}
                 <form.Field
                   name="name"
                   children={(field) => (
                     <FormField field={field}>
                       {(hasError) => (
-                        <>
-                          <div className="space-y-2">
-                            <Label>{t.food.name}</Label>
+                        <div className="space-y-2">
+                          <Label>{t.food.name}</Label>
 
-                            <Input
-                              value={field.state.value}
-                              onChange={(e) =>
-                                field.handleChange(e.target.value)
-                              }
-                              placeholder={t.food.namePlaceholder}
-                              aria-invalid={hasError}
-                            />
-                          </div>
-                        </>
+                          <Input
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder={t.food.namePlaceholder}
+                            aria-invalid={hasError}
+                          />
+                        </div>
                       )}
                     </FormField>
                   )}
@@ -229,6 +284,7 @@ export function FoodCreateDialog({
                               <Label htmlFor="price-input">
                                 {t.food.price}
                               </Label>
+
                               <span className="text-xs text-muted-foreground">
                                 {t.common.currency} ({t.food.baht})
                               </span>
@@ -238,6 +294,7 @@ export function FoodCreateDialog({
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
                                 ฿
                               </span>
+
                               <Input
                                 id="price-input"
                                 type="number"
@@ -254,6 +311,7 @@ export function FoodCreateDialog({
                                 }
                                 aria-invalid={hasError}
                               />
+
                               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-muted-foreground pointer-events-none">
                                 {t.food.baht}
                               </span>
@@ -308,17 +366,14 @@ export function FoodCreateDialog({
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => {
-                    form.reset();
-                    setPreviewUrl(null);
-                    handleClose(false);
-                  }}
+                  onClick={() => handleClose(false)}
+                  disabled={updatingFood}
                 >
                   {t.common.cancel}
                 </Button>
 
-                <Button type="submit" disabled={creatingFood}>
-                  {creatingFood ? `${t.food.adding}` : `${t.food.addFood}`}
+                <Button type="submit" disabled={updatingFood || isFoodLoading}>
+                  {updatingFood ? t.common.saving : t.food.editFood}
                 </Button>
               </DialogFooter>
             </FieldSet>

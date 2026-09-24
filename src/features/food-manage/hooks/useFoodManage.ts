@@ -1,10 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CreateFood, DeleteFood, GetFoods, UpdateFood } from "../service/food-manage-api";
+import {
+  CreateFood,
+  DeleteFood,
+  GetFoodById,
+  GetFoods,
+  UpdateFood,
+} from "../service/food-manage-api";
 import {
   CreateFoodPayload,
   UpdateFoodPayload,
 } from "../types/food_manage_type";
-import { UploadImg } from "@/features/upload-img/service/upload-img-api";
+import {
+  RemoveImg,
+  UploadImg,
+} from "@/features/upload-img/service/upload-img-api";
 import { queryClient } from "@/lib/query-client";
 
 export const useGetFoods = (
@@ -18,6 +27,14 @@ export const useGetFoods = (
     queryFn: () => GetFoods(shopId, page, pageSize, search),
 
     enabled: !!shopId,
+  });
+};
+
+export const useGetFoodById = (id: number, shopId: number) => {
+  return useQuery({
+    queryKey: ["food", id, shopId],
+    queryFn: () => GetFoodById(id, shopId),
+    enabled: !!id && !!shopId,
   });
 };
 
@@ -59,9 +76,11 @@ export const useUpdateFood = () => {
       let imgUrl: string | null = oldImgUrl;
 
       if (data.imgUrl && data.imgUrl instanceof File) {
-        if (data.imgUrl instanceof File) {
-          imgUrl = await UploadImg(data.imgUrl, "food");
+        if (oldImgUrl) {
+          await RemoveImg(oldImgUrl);
         }
+
+        imgUrl = await UploadImg(data.imgUrl, "food");
       }
 
       return await UpdateFood(data.id, {
@@ -88,13 +107,8 @@ export const useUpdateFood = () => {
 
 export const useDeleteFood = () => {
   return useMutation({
-    mutationFn: ({
-      id,
-      shopId,
-    }: {
-      id: number;
-      shopId: number;
-    }) => DeleteFood(id, shopId),
+    mutationFn: ({ id, shopId }: { id: number; shopId: number }) =>
+      DeleteFood(id, shopId),
 
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({

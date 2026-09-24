@@ -14,6 +14,7 @@ export const lo = {
     back: "ກັບຄືນ",
     saving: "ກຳລັງບັນທຶກ...",
     somethingWentWrong: "ເກີດຂໍ້ຜິດພາດ",
+    currency: "ສະກຸນເງິນ",
   },
 
   pagination: {
@@ -45,6 +46,7 @@ export const lo = {
   },
 
   food: {
+    imgAlt: "ຮູບອາຫານ",
     title: "ອາຫານ",
     description: "ເພີ່ມ ແລະ ຈັດການອາຫານພາຍໃນຮ້ານ",
     manage: "ຈັດການອາຫານ",
@@ -61,6 +63,14 @@ export const lo = {
     noImage: "ບໍ່ມີຮູບ",
     baht: "ບາດ",
     addedAt: "ເພີ່ມເມື່ອ",
+    addNewFood: "ເພີ່ມລາຍການອາຫານໃໝ່",
+    namePlaceholder: "ເຊັ່ນ: ເຂົ້າຜັດ",
+    quickPriceUpdate: "ປັບລາຄາຢ່າງໄວ",
+    adding: "ກຳລັງເພີ່ມ...",
+    editFood: "ແກ້ໄຂອາຫານ",
+    editFoodDescription: "ແກ້ໄຂຂໍ້ມູນລາຍການອາຫານ",
+    keepImageHint: "หากບໍ່ເລືອກໄຟລ໌ໃໝ່ ລະບົບຈະໃຊ້ຮູບເກົ່າ",
+    loadingFood: "ກຳລັງໂຫຼດຂໍ້ມູນອາຫານ...",
   },
 
   foodType: {
@@ -81,6 +91,7 @@ export const lo = {
     editSuccess: "ແກ້ໄຂປະເພດສິນຄ້າສຳເລັດແລ້ວ",
     deleteSuccess: "ລຶບປະເພດສິນຄ້າສຳເລັດແລ້ວ",
     deleteFailed: "ບໍ່ສາມາດລຶບປະເພດສິນຄ້າໄດ້",
+    selectType: "ເລືອກປະເພດອາຫານ",
   },
 
   table: {
@@ -147,5 +158,11 @@ export const lo = {
     logoType: "ຮອງຮັບສະເພາະ JPG, PNG ແລະ WebP",
     logoSize: "ຮູບພາບຕ້ອງມີຂະໜາດບໍ່ເກີນ 5MB",
     required: "ກະລຸນາປ້ອນຂໍ້ມູນ",
+    nameRequired: "ກະລຸນາປ້ອນຊື່",
+    priceRequired: "ກະລຸນາປ້ອນລາຄາ",
+    priceMinZero: "ລາຄາຕ້ອງບໍ່น้อยກວ່າ 0",
+    typeRequired: "ກະລຸນາເລືອກປະເພດ",
+    imgSize: "ຮູບພາບຕ້ອງມີຂະໜາດບໍ່ເກີນ 5MB",
+    imgType: "ຮອງຮັບສະເພາະ JPG, PNG ແລະ WebP",
   },
 } as const;

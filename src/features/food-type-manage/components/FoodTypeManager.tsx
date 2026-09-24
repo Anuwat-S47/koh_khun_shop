@@ -3,7 +3,7 @@ import { FoodType } from "../types/food_type_manage_type";
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import { useDeleteFoodType, useGetFoodTypes } from "../hooks/useFoodTypeManage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Pencil, Plus, Tags, Trash2, Utensils } from "lucide-react";
+import { Pencil, Plus, Tags, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,

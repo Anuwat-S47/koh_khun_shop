@@ -5,9 +5,15 @@ import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupTextarea } from "@/components/ui/input-group";
 import { useCreateShop } from "@/features/shop-manage/hooks/useShopManage";
 import { createShopSchema } from "@/features/shop-manage/schemas/shop-schemas";
+import { checkUserHasShop } from "@/features/shop-manage/service/shop-manage-api";
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  isRedirect,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -18,6 +24,30 @@ export const Route = createFileRoute(
     title: "shop.addShop",
     showBackButton: true,
     className: "w-full max-w-2xl border-2 p-4 rounded-2xl",
+  },
+  beforeLoad: async ({ context }) => {
+    const { queryClient, user } = context;
+
+    try {
+      if (user?.id) {
+        const hasShop = await queryClient.ensureQueryData({
+          queryKey: ["user-shop-check", user.id],
+          queryFn: () => checkUserHasShop(user.id),
+        });
+
+        if (hasShop) {
+          throw redirect({
+            to: "/settings/shop-manage",
+            replace: true,
+          });
+        }
+      }
+    } catch (err) {
+      if (isRedirect(err)) {
+        throw err;
+      }
+      console.error("❌ Error in add-shop beforeLoad:", err);
+    }
   },
   component: RouteComponent,
 });
