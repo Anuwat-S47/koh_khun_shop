@@ -1,31 +1,29 @@
-import { MultiLangField } from "@/features/translations/types/language-type";
-
 export type Food = {
   id: number;
   createdAt: string;
   imgUrl: string;
-  name: MultiLangField;
+  name: string;
   price: number;
   typeId: number;
   shopId: number;
 
   type?: {
     id: number;
-    name: MultiLangField;
+    name: string;
   } | null;
 };
 
 export type CreateFoodData = {
   shopId: number;
   typeId: number;
-  name: MultiLangField;
+  name: string;
   price: number;
   imgUrl: string | null;
 };
 
 export type CreateFoodPayload = {
   shopId: number;
-  name: MultiLangField;
+  name: string;
   price: number;
   typeId: number;
   imgUrl?: File;
@@ -34,7 +32,7 @@ export type CreateFoodPayload = {
 export type UpdateFoodData = {
   id: number;
   shopId: number;
-  name: MultiLangField;
+  name: string;
   price: number;
   typeId: number;
   imgUrl?: string | null;
@@ -43,7 +41,7 @@ export type UpdateFoodData = {
 export type UpdateFoodPayload = {
   id: number;
   shopId: number;
-  name: MultiLangField;
+  name: string;
   price: number;
   typeId: number;
   imgUrl?: File;

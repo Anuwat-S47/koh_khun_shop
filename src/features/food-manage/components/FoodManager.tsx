@@ -17,7 +17,7 @@ export const FoodManager = ({ shopId }: FoodManagerProps) => {
   const [search, setSearch] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const { page, pageSize, setPage } = useFoodStore();
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
