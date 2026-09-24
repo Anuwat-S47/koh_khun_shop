@@ -1,5 +1,5 @@
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShopTableManager } from "@/features/shop-manage/components/ShopTableManager";
 import { FoodTypeManager } from "@/features/food-type-manage/components/FoodTypeManager";
