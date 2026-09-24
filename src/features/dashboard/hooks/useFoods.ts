@@ -7,6 +7,6 @@ export function useGetFoods() {
   return useQuery<Product[], Error>({
     queryKey: ["foods"],
     queryFn: GetFoods,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 5, 
   });
 }
