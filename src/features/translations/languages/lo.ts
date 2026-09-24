@@ -146,6 +146,7 @@ export const lo = {
     settings: "ການຕັ້ງຄ່າ",
     shopSetting: "ຕັ້ງຄ່າຮ້ານຄ້າ",
     otherSettings: "ການຕັ້ງຄ່າອື່ນໆ",
+    bill: "ບິນ",
   },
 
   validation: {

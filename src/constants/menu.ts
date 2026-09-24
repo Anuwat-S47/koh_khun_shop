@@ -1,6 +1,8 @@
 import { SidebarMenu } from "@/types/menu-types";
 import {
   Home,
+  icons,
+  Receipt,
   Settings,
   ShoppingBag,
   SlidersHorizontal,
@@ -11,6 +13,11 @@ export const sidebarMenu: SidebarMenu[] = [
     title: "dashboard",
     to: "/",
     icon: Home,
+  },
+  {
+    title: "bill",
+    to: "/bill",
+    icon: Receipt,
   },
 
   {

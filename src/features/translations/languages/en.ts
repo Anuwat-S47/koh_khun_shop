@@ -145,6 +145,7 @@ export const en = {
     settings: "Settings",
     shopSetting: "Shop Settings",
     otherSettings: "Other Settings",
+    bill: "Bill",
   },
 
   validation: {

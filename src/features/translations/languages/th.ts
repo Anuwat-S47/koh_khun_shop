@@ -142,6 +142,7 @@ export const th = {
     settings: "ตั้งค่า",
     shopSetting: "ตั้งค่าร้านค้า",
     otherSettings: "ตั้งค่าอื่นๆ",
+    bill: "บิล"
   },
 
   validation: {
