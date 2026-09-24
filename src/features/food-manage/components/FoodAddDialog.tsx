@@ -20,6 +20,12 @@ import { useForm } from "@tanstack/react-form";
 import { useCreateFood } from "../hooks/useFoodManage";
 import Swal from "sweetalert2";
 import { useGetFoodTypes } from "@/features/food-type-manage/hooks/useFoodTypeManage";
+import { useEffect, useState } from "react";
+import { useTranslation } from "@/features/translations/hooks/useTranSlation";
+import { CreateFoodRequest, createFoodSchema } from "../schemas/food-schemas";
+import { FieldGroup, FieldSet } from "@/components/ui/field";
+import FormField from "@/components/FormField";
+
 type FoodCreateDialogProps = {
   shopId: number;
   open: boolean;
@@ -31,28 +37,43 @@ export const FoodCreateDialog = ({
   open,
   onOpenChange,
 }: FoodCreateDialogProps) => {
-  const createFood = useCreateFood();
-
+  const { mutateAsync: createFood, isPending: creatingFood } = useCreateFood();
   const { data: foodTypes, isLoading: isFoodTypeLoading } =
     useGetFoodTypes(shopId);
 
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  const defaultValues: CreateFoodRequest = {
+    shopId,
+    name: "",
+    price: 0,
+    typeId: 0,
+    imgUrl: undefined,
+  };
+
   const form = useForm({
-    defaultValues: {
-      shopId: shopId,
-      name: "",
-      price: 0,
-      typeId: 0,
-      imgUrl: "", //แก้
+    defaultValues,
+    validators: {
+      onSubmit: createFoodSchema(t),
     },
 
     onSubmit: async ({ value }) => {
       try {
-        await createFood.mutateAsync({
-          shopId: value.shopId,
+        await createFood({
+          shopId,
           name: value.name,
-          price: Number(value.price),
-          typeId: Number(value.typeId),
-          imgUrl: value.imgUrl || undefined,
+          price: value.price,
+          typeId: value.typeId,
+          imgUrl: value.imgUrl,
         });
 
         await Swal.fire({
@@ -63,8 +84,9 @@ export const FoodCreateDialog = ({
         });
 
         form.reset();
+        setPreviewUrl(null);
 
-        onOpenChange(false);
+        // onOpenChange(false);
       } catch (error) {
         await Swal.fire({
           title: "เกิดข้อผิดพลาด",
@@ -89,9 +111,9 @@ export const FoodCreateDialog = ({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>เพิ่มอาหาร</DialogTitle>
+          <DialogTitle>{t.food.addFood}</DialogTitle>
 
-          <DialogDescription>เพิ่มรายการอาหารใหม่</DialogDescription>
+          <DialogDescription>{t.food.addNewFood}</DialogDescription>
         </DialogHeader>
 
         <form
@@ -103,108 +125,243 @@ export const FoodCreateDialog = ({
           }}
           className="space-y-4"
         >
-          {/* Image */}
-          <form.Field
-            name="imgUrl"
-            children={(field) => (
-              <div className="space-y-2">
-                <Label>รูปอาหาร</Label>
+          <FieldGroup>
+            <FieldSet>
+              <FieldGroup>
+                {/* Image */}
+                <form.Field
+                  name="imgUrl"
+                  children={(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <div className="space-y-2">
+                          <Label>{t.food.imgAlt}</Label>
 
-                <Input
-                  type="text"
-                  placeholder="URL รูปอาหาร"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                          {previewUrl && (
+                            <div className="flex justify-center my-3">
+                              <div className="relative w-48 h-48 sm:w-60 sm:h-60 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-xs group">
+                                <img
+                                  src={previewUrl}
+                                  alt={t.food.imgAlt}
+                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          <Input
+                            id={field.name}
+                            name={field.name}
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+
+                              if (!file) return;
+
+                              field.handleChange(file);
+                              const url = URL.createObjectURL(file);
+                              setPreviewUrl(url);
+                            }}
+                            aria-invalid={hasError}
+                          />
+                        </div>
+                      )}
+                    </FormField>
+                  )}
                 />
-              </div>
-            )}
-          />
 
-          <form.Field
-            name="name"
-            children={(field) => (
-              <div className="space-y-2">
-                <Label>ชื่ออาหาร</Label>
+                <form.Field
+                  name="name"
+                  children={(field) => (
+                    <FormField field={field}>
+                      {(hasError) => (
+                        <>
+                          <div className="space-y-2">
+                            <Label>{t.food.name}</Label>
 
-                <Input
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="เช่น ข้าวผัด"
+                            <Input
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              placeholder={t.food.namePlaceholder}
+                              aria-invalid={hasError}
+                            />
+                          </div>
+                        </>
+                      )}
+                    </FormField>
+                  )}
                 />
-              </div>
-            )}
-          />
 
-          {/* Type */}
-          <form.Field
-            name="typeId"
-            children={(field) => {
-              const selectedType = foodTypes?.find(
-                (type) => type.id === field.state.value,
-              );
+                {/* Type */}
+                <form.Field
+                  name="typeId"
+                  children={(field) => {
+                    const selectedType = foodTypes?.find(
+                      (type) => type.id === field.state.value,
+                    );
 
-              return (
-                <div className="space-y-2">
-                  <Label>ประเภทอาหาร</Label>
+                    return (
+                      <FormField field={field}>
+                        {(hasError) => (
+                          <div className="space-y-2">
+                            <Label>{t.foodType.title}</Label>
 
-                  <Select
-                    value={field.state.value ? String(field.state.value) : ""}
-                    onValueChange={(value) => field.handleChange(Number(value))}
-                    disabled={isFoodTypeLoading}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="เลือกประเภทอาหาร">
-                        {selectedType?.name}
-                      </SelectValue>
-                    </SelectTrigger>
+                            <Select
+                              value={
+                                field.state.value
+                                  ? String(field.state.value)
+                                  : ""
+                              }
+                              onValueChange={(value) =>
+                                field.handleChange(Number(value))
+                              }
+                              disabled={isFoodTypeLoading}
+                              aria-invalid={hasError}
+                            >
+                              <SelectTrigger>
+                                <SelectValue
+                                  placeholder={t.foodType.selectType}
+                                >
+                                  {selectedType?.name}
+                                </SelectValue>
+                              </SelectTrigger>
 
-                    <SelectContent>
-                      {foodTypes?.map((type) => (
-                        <SelectItem key={type.id} value={String(type.id)}>
-                          {type.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              );
-            }}
-          />
+                              <SelectContent>
+                                {foodTypes?.map((type) => (
+                                  <SelectItem
+                                    key={type.id}
+                                    value={String(type.id)}
+                                  >
+                                    {type.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+                      </FormField>
+                    );
+                  }}
+                />
 
-          {/* Price */}
-          <form.Field
-            name="price"
-            children={(field) => (
-              <div className="space-y-2">
-                <Label>ราคา</Label>
+                {/* Price */}
+                <form.Field
+                  name="price"
+                  children={(field) => {
+                    const handleAdjustPrice = (amount: number) => {
+                      const currentValue = Number(field.state.value) || 0;
+                      const newValue = Math.max(0, currentValue + amount);
+                      field.handleChange(newValue);
+                    };
 
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="number"
-                    min="0"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(Number(e.target.value))}
-                  />
+                    const negativeSteps = [-100, -50, -10, -1];
+                    const positiveSteps = [1, 10, 50, 100];
 
-                  <span className="text-sm">บาท</span>
-                </div>
-              </div>
-            )}
-          />
+                    return (
+                      <FormField field={field}>
+                        {(hasError) => (
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <Label htmlFor="price-input">
+                                {t.food.price}
+                              </Label>
+                              <span className="text-xs text-muted-foreground">
+                                {t.common.currency} ({t.food.baht})
+                              </span>
+                            </div>
 
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleClose(false)}
-            >
-              ยกเลิก
-            </Button>
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
+                                ฿
+                              </span>
+                              <Input
+                                id="price-input"
+                                type="number"
+                                min="0"
+                                placeholder="0.00"
+                                className="pl-8 pr-12 font-mono text-base font-semibold"
+                                value={field.state.value ?? ""}
+                                onChange={(e) =>
+                                  field.handleChange(
+                                    e.target.value === ""
+                                      ? 0
+                                      : Number(e.target.value),
+                                  )
+                                }
+                                aria-invalid={hasError}
+                              />
+                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-muted-foreground pointer-events-none">
+                                {t.food.baht}
+                              </span>
+                            </div>
 
-            <Button type="submit" disabled={createFood.isPending}>
-              {createFood.isPending ? "กำลังเพิ่ม..." : "เพิ่มอาหาร"}
-            </Button>
-          </DialogFooter>
+                            <div className="space-y-1.5 pt-1">
+                              <span className="text-xs text-muted-foreground">
+                                {t.food.quickPriceUpdate}:
+                              </span>
+
+                              <div className="flex flex-wrap items-center gap-1">
+                                {negativeSteps.map((step) => (
+                                  <button
+                                    key={step}
+                                    type="button"
+                                    onClick={() => handleAdjustPrice(step)}
+                                    className="text-xs font-medium px-2 py-1 rounded border border-destructive/20 bg-destructive/5 text-destructive hover:bg-destructive/15 active:scale-95 transition-all"
+                                  >
+                                    {step}
+                                  </button>
+                                ))}
+
+                                <button
+                                  type="button"
+                                  onClick={() => field.handleChange(0)}
+                                  className="text-xs font-semibold px-2.5 py-1 rounded border border-input bg-muted hover:bg-accent active:scale-95 transition-all"
+                                >
+                                  0
+                                </button>
+
+                                {positiveSteps.map((step) => (
+                                  <button
+                                    key={step}
+                                    type="button"
+                                    onClick={() => handleAdjustPrice(step)}
+                                    className="text-xs font-medium px-2 py-1 rounded border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95 transition-all shadow-sm"
+                                  >
+                                    +{step}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </FormField>
+                    );
+                  }}
+                />
+              </FieldGroup>
+
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    form.reset();
+                    setPreviewUrl(null);
+                    handleClose(false);
+                  }}
+                >
+                  {t.common.cancel}
+                </Button>
+
+                <Button type="submit" disabled={creatingFood}>
+                  {creatingFood ? `${t.food.adding}` : `${t.food.addFood}`}
+                </Button>
+              </DialogFooter>
+            </FieldSet>
+          </FieldGroup>
         </form>
       </DialogContent>
     </Dialog>

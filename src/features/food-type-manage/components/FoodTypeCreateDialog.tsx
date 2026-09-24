@@ -114,7 +114,10 @@ export function FoodTypeCreateDialog({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => {
+                form.reset();
+                onOpenChange(false)
+              }}
               disabled={isPending}
             >
               {t.common.cancel}

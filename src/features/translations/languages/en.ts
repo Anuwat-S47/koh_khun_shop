@@ -14,6 +14,7 @@ export const en = {
     back: "Back",
     saving: "Saving...",
     somethingWentWrong: "Something went wrong",
+    currency: "Currency",
   },
 
   pagination: {
@@ -45,6 +46,7 @@ export const en = {
   },
 
   food: {
+    imgAlt: "Food image",
     title: "Food",
     addFood: "Add Food",
     name: "Food Name",
@@ -61,6 +63,10 @@ export const en = {
     noImage: "No image",
     baht: "THB",
     addedAt: "Added on",
+    addNewFood: "Add new food item",
+    namePlaceholder: "e.g. Fried Rice",
+    quickPriceUpdate: "Quick price update",
+    adding: "Adding...",
   },
 
   foodType: {
@@ -80,6 +86,7 @@ export const en = {
     editSuccess: "Category updated successfully",
     deleteSuccess: "Category deleted successfully",
     deleteFailed: "Failed to delete category",
+    selectType: "Select food category",
   },
 
   table: {
@@ -146,5 +153,11 @@ export const en = {
     logoType: "Supports JPG, PNG, and WebP only",
     logoSize: "Image size must not exceed 5MB",
     required: "This field is required",
+    nameRequired: "Please enter name",
+    priceRequired: "Please enter price",
+    priceMinZero: "Price must be greater than or equal to 0",
+    typeRequired: "Please select category",
+    imgSize: "Image size must not exceed 5MB",
+    imgType: "Supports JPG, PNG, and WebP only",
   },
 } as const;
