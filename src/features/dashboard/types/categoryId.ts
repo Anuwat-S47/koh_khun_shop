@@ -1,13 +1,19 @@
-export type CategoryId = 'all' | 'main' | 'soup' | 'appetizer' | 'drink';
+export type CategoryId = "all" | number;
 
 export interface Product {
-  id: string;
+  id: number;
+  created_at: string;
+  img_url: string | null;
   name: string;
   price: number;
-  category: CategoryId;
-  categoryName: string;
-  image?: string;
+  type_id: number;
+  shop_id: number;
 }
+
+export type FoodType = {
+  id: number;
+  name: string;
+};
 
 export interface CartItem extends Product {
   quantity: number;
