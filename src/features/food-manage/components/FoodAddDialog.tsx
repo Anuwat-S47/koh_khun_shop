@@ -9,13 +9,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "@tanstack/react-form";
 import { useCreateFood } from "../hooks/useFoodManage";
 import Swal from "sweetalert2";
@@ -25,6 +18,7 @@ import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import { CreateFoodRequest, createFoodSchema } from "../schemas/food-schemas";
 import { FieldGroup, FieldSet } from "@/components/ui/field";
 import FormField from "@/components/FormField";
+import { FoodTypeSelector } from "@/features/food-type-manage/components/FoodTypeSelector";
 
 type FoodCreateDialogProps = {
   shopId: number;
@@ -32,14 +26,15 @@ type FoodCreateDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export const FoodCreateDialog = ({
+export function FoodCreateDialog({
   shopId,
   open,
   onOpenChange,
-}: FoodCreateDialogProps) => {
+}: FoodCreateDialogProps) {
   const { mutateAsync: createFood, isPending: creatingFood } = useCreateFood();
   const { data: foodTypes, isLoading: isFoodTypeLoading } =
     useGetFoodTypes(shopId);
+  const safeFoodTypes = foodTypes ?? [];
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { t } = useTranslation();
@@ -198,53 +193,19 @@ export const FoodCreateDialog = ({
                 {/* Type */}
                 <form.Field
                   name="typeId"
-                  children={(field) => {
-                    const selectedType = foodTypes?.find(
-                      (type) => type.id === field.state.value,
-                    );
-
-                    return (
-                      <FormField field={field}>
-                        {(hasError) => (
-                          <div className="space-y-2">
-                            <Label>{t.foodType.title}</Label>
-
-                            <Select
-                              value={
-                                field.state.value
-                                  ? String(field.state.value)
-                                  : ""
-                              }
-                              onValueChange={(value) =>
-                                field.handleChange(Number(value))
-                              }
-                              disabled={isFoodTypeLoading}
-                              aria-invalid={hasError}
-                            >
-                              <SelectTrigger>
-                                <SelectValue
-                                  placeholder={t.foodType.selectType}
-                                >
-                                  {selectedType?.name}
-                                </SelectValue>
-                              </SelectTrigger>
-
-                              <SelectContent>
-                                {foodTypes?.map((type) => (
-                                  <SelectItem
-                                    key={type.id}
-                                    value={String(type.id)}
-                                  >
-                                    {type.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        )}
-                      </FormField>
-                    );
-                  }}
+                  children={(field) => (
+                    <FormField field={field}>
+                      {() => (
+                        <FoodTypeSelector
+                          value={field.state.value}
+                          onChange={(id) => field.handleChange(id)}
+                          foodTypes={safeFoodTypes}
+                          isLoading={isFoodTypeLoading}
+                          t={t}
+                        />
+                      )}
+                    </FormField>
+                  )}
                 />
 
                 {/* Price */}
@@ -366,4 +327,4 @@ export const FoodCreateDialog = ({
       </DialogContent>
     </Dialog>
   );
-};
+}

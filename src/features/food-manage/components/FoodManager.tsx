@@ -8,14 +8,19 @@ import Swal from "sweetalert2";
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
 import { useState } from "react";
 import { FoodCreateDialog } from "./FoodAddDialog";
+import { FoodEditDialog } from "./FoodEditDialog";
 
 type FoodManagerProps = {
   shopId: number;
 };
 
-export const FoodManager = ({ shopId }: FoodManagerProps) => {
+export function FoodManager({ shopId }: FoodManagerProps) {
   const [search, setSearch] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedFoodId, setSelectedFoodId] = useState<number | null>(null);
+
   const { page, pageSize, setPage } = useFoodStore();
   const { t } = useTranslation();
 
@@ -180,7 +185,14 @@ export const FoodManager = ({ shopId }: FoodManagerProps) => {
                     </div>
 
                     <div className="flex gap-2">
-                      <Button variant="outline" size="icon">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          setSelectedFoodId(food.id);
+                          setEditDialogOpen(true);
+                        }}
+                      >
                         <Pencil />
                       </Button>
                       <Button
@@ -230,6 +242,21 @@ export const FoodManager = ({ shopId }: FoodManagerProps) => {
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
       />
+
+      {selectedFoodId && (
+        <FoodEditDialog
+          foodId={selectedFoodId}
+          shopId={shopId}
+          open={editDialogOpen}
+          onOpenChange={(open) => {
+            setEditDialogOpen(open);
+
+            if (!open) {
+              setSelectedFoodId(null);
+            }
+          }}
+        />
+      )}
     </>
   );
-};
+}

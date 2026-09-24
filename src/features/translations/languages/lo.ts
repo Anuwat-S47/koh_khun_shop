@@ -67,6 +67,8 @@ export const lo = {
     namePlaceholder: "ເຊັ່ນ: ເຂົ້າຜັດ",
     quickPriceUpdate: "ປັບລາຄາຢ່າງໄວ",
     adding: "ກຳລັງເພີ່ມ...",
+    editFood: "ແກ້ໄຂອາຫານ",
+    editFoodDescription: "ແກ້ໄຂຂໍ້ມູນລາຍການອາຫານ",
   },
 
   foodType: {

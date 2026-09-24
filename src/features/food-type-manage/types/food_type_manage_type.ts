@@ -1,6 +1,8 @@
 export type FoodType = {
   id: number;
   name: string;
+  shop_id: number;
+  created_at?: string;
 };
 
 export type CreateFoodTypePayload = {

@@ -67,6 +67,8 @@ export const en = {
     namePlaceholder: "e.g. Fried Rice",
     quickPriceUpdate: "Quick price update",
     adding: "Adding...",
+    editFood: "Edit Food",
+    editFoodDescription: "Edit food item details",
   },
 
   foodType: {

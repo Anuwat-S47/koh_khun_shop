@@ -38,6 +38,15 @@ export type UpdateFoodData = {
   imgUrl?: string | null;
 };
 
+export type UpdateFoodRequest = {
+  id: number;
+  shopId: number;
+  name: string;
+  price: number;
+  typeId: number;
+  imgUrl?: File;
+};
+
 export type UpdateFoodPayload = {
   id: number;
   shopId: number;

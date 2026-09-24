@@ -1,5 +1,19 @@
 import z from "zod";
 
+export const updateFoodSchema = (t: any) =>
+  z.object({
+    id: z.number(),
+    shopId: z.number(),
+
+    name: z.string().min(1, t("validation.nameRequired")),
+
+    price: z.number().gt(0, t("validation.priceMinZero")),
+
+    typeId: z.number().gt(0, t("validation.typeRequired")),
+
+    imgUrl: z.instanceof(File).optional(),
+  });
+
 const createBasefoodSchema = (t: (key: string) => string) => {
   return z.object({
     shopId: z.number(),

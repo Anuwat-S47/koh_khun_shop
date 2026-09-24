@@ -64,6 +64,8 @@ export const th = {
     namePlaceholder: "เช่น ข้าวผัด",
     quickPriceUpdate: "ปรับราคาด่วน",
     adding: "กำลังเพิ่ม...",
+    editFood: "แก้ไขอาหาร",
+    editFoodDescription: "แก้ไขข้อมูลรายการอาหาร",
   },
 
   foodType: {
