@@ -127,7 +127,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="flex w-[calc(100%+3rem)] h-[calc(100%+3rem)] -m-6 bg-gray-50 overflow-hidden">
+    <div className="flex bg-gray-50 overflow-hidden ">
       {/* =====================================
           ฝั่งซ้าย : รายการอาหาร
       ====================================== */}
@@ -425,7 +425,7 @@ function RouteComponent() {
           ฝั่งขวา : CartPanel
       ====================================== */}
 
-      <div className="shrink-0 h-full">
+      <div className="shrink-0 h-full overflow-y-auto">
         <CartPanel
           tableInfo={tableInfo}
           cart={cart}

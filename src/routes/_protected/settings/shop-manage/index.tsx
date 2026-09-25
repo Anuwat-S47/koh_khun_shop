@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetShop } from "@/features/shop-manage/hooks/useShopManage";
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
-import { useLanguageStore } from "@/features/translations/stores/language-store";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { SquarePen, Store } from "lucide-react";
 

@@ -34,7 +34,7 @@ export function CartPanel({
   const isEmpty = cart.length === 0;
 
   return (
-    <div className="w-96 bg-white border-l border-gray-200 flex flex-col h-full">
+    <div className="w-96 bg-white border-l border-gray-200 flex flex-col h-250 overflow-y-auto">
       {/* =================================
           Header : โต๊ะอาหาร
       ================================== */}

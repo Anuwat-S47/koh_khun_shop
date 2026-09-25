@@ -1,11 +1,23 @@
 import { SidebarMenu } from "@/types/menu-types";
-import { Home, Settings, ShoppingBag, SlidersHorizontal } from "lucide-react";
+import {
+  Home,
+  icons,
+  Receipt,
+  Settings,
+  ShoppingBag,
+  SlidersHorizontal,
+} from "lucide-react";
 
 export const sidebarMenu: SidebarMenu[] = [
   {
     title: "dashboard",
     to: "/",
     icon: Home,
+  },
+  {
+    title: "bill",
+    to: "/bill",
+    icon: Receipt,
   },
 
   {

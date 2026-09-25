@@ -10,7 +10,7 @@ export function PageLayout({
   className = "",
 }: PageLayoutProps) {
   return (
-    <div className={`p-4 md:p-6 space-y-6 max-w-7xl mx-auto`}>
+    <div>
       <div className="space-y-3">
         {showBackButton && <ButtonBack />}
 
@@ -31,7 +31,7 @@ export function PageLayout({
         )}
       </div>
       <main className="w-full">
-        <div className="flex justify-center my-10">
+        <div className="flex justify-center ">
           <div className={` ${className}`}>
             {children}
           </div>
