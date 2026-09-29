@@ -1,18 +1,14 @@
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
-import {
-  createFileRoute,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShopTableManager } from "@/features/shop-manage/components/ShopTableManager";
-import { FoodTypeManager } from "@/features/food-type-manage/components/FoodTypeManager";
+
 import { VerifyShop } from "@/features/shop-manage/service/shop-manage-api";
-import { FoodManager } from "@/features/food-manage/components/FoodManager";
-import { Utensils, Tags, UtensilsCrossed } from "lucide-react";
+import { Utensils, UtensilsCrossed } from "lucide-react";
+import { FoodAndTypeManager } from "@/components/FoodAndTypeManager";
 
 type ShopManageSearch = {
-  tab?: "table" | "food-type" | "food";
+  tab?: "table" | "food";
 };
 
 export const Route = createFileRoute(
@@ -32,11 +28,9 @@ export const Route = createFileRoute(
   },
   beforeLoad: async ({ params }) => {
     const shopId = Number(params.shopId);
-
     if (!Number.isInteger(shopId) || shopId <= 0) {
       throw new Error("Invalid shop ID");
     }
-
     await VerifyShop(shopId);
   },
   component: RouteComponent,
@@ -44,9 +38,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { shopId } = Route.useParams();
-  const search = useSearch({
-    from: "/_protected/settings/shop-manage/$shopId/",
-  });
+  const search = useSearch({ from: "/_protected/settings/shop-manage/$shopId/" });
   const navigate = useNavigate({ from: Route.fullPath });
   const { t } = useTranslation();
 
@@ -61,30 +53,18 @@ function RouteComponent() {
 
   return (
     <div className="w-full space-y-4">
-      <Tabs
-        value={currentTab}
-        onValueChange={handleTabChange}
-        className="w-full"
-      >
-        <TabsList className="grid w-full grid-cols-3 h-12 p-1 bg-slate-100 rounded-xl">
-          <TabsTrigger
-            value="table"
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
+        <TabsList className="grid w-full grid-cols-2 h-11 p-1 bg-slate-100 rounded-xl">
+          <TabsTrigger 
+            value="table" 
             className="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium rounded-lg data-[state=active]:bg-white data-[state=active]:text-amber-600 data-[state=active]:shadow-xs transition-all"
           >
             <Utensils className="w-4 h-4" />
             <span>{t.table.title}</span>
           </TabsTrigger>
 
-          <TabsTrigger
-            value="food-type"
-            className="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium rounded-lg data-[state=active]:bg-white data-[state=active]:text-amber-600 data-[state=active]:shadow-xs transition-all"
-          >
-            <Tags className="w-4 h-4" />
-            <span>{t.food.type}</span>
-          </TabsTrigger>
-
-          <TabsTrigger
-            value="food"
+          <TabsTrigger 
+            value="food" 
             className="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium rounded-lg data-[state=active]:bg-white data-[state=active]:text-amber-600 data-[state=active]:shadow-xs transition-all"
           >
             <UtensilsCrossed className="w-4 h-4" />
@@ -96,15 +76,8 @@ function RouteComponent() {
           <ShopTableManager shopId={Number(shopId)} />
         </TabsContent>
 
-        <TabsContent
-          value="food-type"
-          className="mt-4 focus-visible:outline-none"
-        >
-          <FoodTypeManager shopId={Number(shopId)} />
-        </TabsContent>
-
         <TabsContent value="food" className="mt-4 focus-visible:outline-none">
-          <FoodManager shopId={Number(shopId)} />
+          <FoodAndTypeManager shopId={Number(shopId)} />
         </TabsContent>
       </Tabs>
     </div>

@@ -28,6 +28,7 @@ export const GetFoods = async (
   page: number = 1,
   pageSize: number = 20,
   search: string = "",
+  typeId: number | null = null,
 ) => {
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
@@ -49,6 +50,10 @@ export const GetFoods = async (
 
   if (search.trim()) {
     query = query.ilike("name", `%${search.trim()}%`);
+  }
+
+  if (typeId !== null) {
+    query = query.eq("type_id", typeId);
   }
 
   const { data, error, count } = await query
