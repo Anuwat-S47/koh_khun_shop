@@ -8,9 +8,10 @@ export function PageLayout({
   action,
   showBackButton = true,
   className = "",
+  layoutClassName = "",
 }: PageLayoutProps) {
   return (
-    <div>
+    <div className={` ${layoutClassName}`}>
       <div className="space-y-3">
         {showBackButton && <ButtonBack />}
 
@@ -31,10 +32,8 @@ export function PageLayout({
         )}
       </div>
       <main className="w-full">
-        <div className="flex justify-center ">
-          <div className={` ${className}`}>
-            {children}
-          </div>
+        <div className="flex justify-center">
+          <div className={` ${className}`}>{children}</div>
         </div>
       </main>
     </div>

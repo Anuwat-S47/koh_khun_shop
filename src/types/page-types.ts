@@ -5,4 +5,5 @@ export interface PageLayoutProps {
   action?: React.ReactNode;
   showBackButton?: boolean;
   className?: string;
+  layoutClassName?: string;
 }
