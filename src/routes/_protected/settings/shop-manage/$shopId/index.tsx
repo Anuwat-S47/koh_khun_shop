@@ -12,6 +12,7 @@ export const Route = createFileRoute(
   staticData: {
     title: "shop.manage",
     description: "shop.manageDescription",
+    layoutClassName: "p-4 md:p-6 space-y-6 max-w-7xl mx-auto",
     className: "w-full max-w-2xl",
     showBackButton: true,
   },
