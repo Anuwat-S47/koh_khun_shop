@@ -10,6 +10,7 @@ import { ProductCard } from "../../features/dashboard/components/ProductCard";
 import { CartPanel } from "../../features/dashboard/components/CartPanel";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_protected/")({
   staticData: {
@@ -64,6 +65,7 @@ function RouteComponent() {
   const ITEMS_PER_PAGE = 20;
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFoodTypeExpanded, setIsFoodTypeExpanded] = useState(false);
 
   // =========================
   // RESET PAGE
@@ -87,6 +89,24 @@ function RouteComponent() {
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
   const currentProducts = products.slice(startIndex, endIndex);
+  const FOOD_TYPE_LIMIT = 8;
+
+  const totalFoodTypes = foodTypes?.length || 0;
+
+  const hasMoreFoodTypes = totalFoodTypes > FOOD_TYPE_LIMIT;
+
+  const visibleFoodTypes = isFoodTypeExpanded
+    ? foodTypes
+    : foodTypes?.slice(0, FOOD_TYPE_LIMIT);
+
+  const selectedFoodTypeHidden =
+    selectedCategory !== "all" &&
+    !isFoodTypeExpanded &&
+    !visibleFoodTypes?.some((type) => type.id === selectedCategory);
+
+  const hiddenSelectedFoodType = selectedFoodTypeHidden
+    ? foodTypes?.find((type) => type.id === selectedCategory)
+    : null;
 
   // =========================
   // PROTECT CURRENT PAGE
@@ -183,55 +203,121 @@ function RouteComponent() {
           ====================================== */}
 
           {!isPOSLoading && !isError && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {/* ทั้งหมด */}
-              <button
-                type="button"
-                onClick={() => setSelectedCategory("all")}
-                className={`
-      shrink-0
-      px-4
-      py-2
-      rounded-lg
-      text-sm
-      font-medium
-      transition
-      whitespace-nowrap
-      ${
-        selectedCategory === "all"
-          ? "bg-amber-500 text-white shadow-sm"
-          : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
-      }
-    `}
-              >
-                ทั้งหมด
-              </button>
+            <div className="space-y-2 mb-6">
+              {/* หัวข้อประเภทอาหาร */}
+              <div className="flex justify-between items-center">
+                <Label>ประเภทอาหาร</Label>
+              </div>
 
-              {/* ประเภทอาหาร */}
-              {foodTypes.map((type) => (
+              <div className="flex flex-wrap items-center gap-2">
+                {/* ทั้งหมด */}
                 <button
-                  key={type.id}
                   type="button"
-                  onClick={() => setSelectedCategory(type.id)}
+                  onClick={() => setSelectedCategory("all")}
                   className={`
-        shrink-0
-        px-4
-        py-2
-        rounded-lg
-        text-sm
-        font-medium
-        transition
-        whitespace-nowrap
-        ${
-          selectedCategory === type.id
-            ? "bg-amber-500 text-white shadow-sm"
-            : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
-        }
-      `}
+          text-sm
+          font-medium
+          px-3.5
+          py-1.5
+          rounded-lg
+          border
+          transition-all
+          active:scale-95
+          ${
+            selectedCategory === "all"
+              ? "bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20"
+              : "bg-background border-input hover:bg-accent hover:text-accent-foreground"
+          }
+        `}
                 >
-                  {type.name}
+                  ทั้งหมด
                 </button>
-              ))}
+
+                {/* ประเภทอาหาร */}
+                {visibleFoodTypes?.map((type) => {
+                  const isSelected = selectedCategory === type.id;
+
+                  return (
+                    <button
+                      key={type.id}
+                      type="button"
+                      onClick={() => setSelectedCategory(type.id)}
+                      className={`
+              text-sm
+              font-medium
+              px-3.5
+              py-1.5
+              rounded-lg
+              border
+              transition-all
+              active:scale-95
+              ${
+                isSelected
+                  ? "bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20"
+                  : "bg-background border-input hover:bg-accent hover:text-accent-foreground"
+              }
+            `}
+                    >
+                      {type.name}
+                    </button>
+                  );
+                })}
+
+                {/* แสดงประเภทที่เลือกอยู่ แม้จะถูกซ่อน */}
+                {hiddenSelectedFoodType && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelectedCategory(hiddenSelectedFoodType.id)
+                    }
+                    className="
+            text-sm
+            font-medium
+            px-3.5
+            py-1.5
+            rounded-lg
+            border
+            bg-primary
+            text-primary-foreground
+            border-primary
+            shadow-sm
+            ring-2
+            ring-primary/20
+            active:scale-95
+            transition-all
+          "
+                  >
+                    {hiddenSelectedFoodType.name}
+                  </button>
+                )}
+
+                {/* เพิ่มเติม */}
+                {hasMoreFoodTypes && (
+                  <button
+                    type="button"
+                    onClick={() => setIsFoodTypeExpanded(!isFoodTypeExpanded)}
+                    className="
+            text-sm
+            font-medium
+            px-3
+            py-1.5
+            rounded-lg
+            border
+            border-dashed
+            border-primary/40
+            bg-primary/5
+            text-primary
+            hover:bg-primary/10
+            active:scale-95
+            transition-all
+          "
+                  >
+                    {isFoodTypeExpanded
+                      ? "ย่อลง ▴"
+                      : `+${totalFoodTypes - FOOD_TYPE_LIMIT} รายการเพิ่มเติม ▾`}
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
