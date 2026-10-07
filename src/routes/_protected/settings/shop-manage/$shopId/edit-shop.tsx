@@ -9,6 +9,7 @@ export const Route = createFileRoute(
     title: "shop.editShop",
     showBackButton: true,
     className: "w-full max-w-2xl border-2 p-4 rounded-2xl",
+    layoutClassName: "p-4 md:p-6 space-y-6 max-w-7xl mx-auto",
   },
   component: EditShopPage,
 });

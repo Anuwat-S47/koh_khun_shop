@@ -8,9 +8,10 @@ export function PageLayout({
   action,
   showBackButton = true,
   className = "",
+  layoutClassName = "",
 }: PageLayoutProps) {
   return (
-    <div>
+    <div className={` ${layoutClassName}`}>
       <div className="space-y-3">
         {showBackButton && <ButtonBack />}
 

@@ -21,10 +21,11 @@ export const useGetFoods = (
   page: number,
   pageSize: number,
   search: string,
+  typeId: number | null,
 ) => {
   return useQuery({
-    queryKey: ["foods", shopId, page, pageSize, search],
-    queryFn: () => GetFoods(shopId, page, pageSize, search),
+    queryKey: ["foods", shopId, page, pageSize, search, typeId],
+    queryFn: () => GetFoods(shopId, page, pageSize, search, typeId),
 
     enabled: !!shopId,
   });

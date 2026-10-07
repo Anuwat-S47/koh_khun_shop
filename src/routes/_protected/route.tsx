@@ -41,12 +41,13 @@ function Layout() {
   const matches = useMatches();
 
   const currentMatch = matches[matches.length - 1];
-  const { title, description, showBackButton, className } =
+  const { title, description, showBackButton, className, layoutClassName } =
     (currentMatch?.staticData as {
       title?: string;
       description?: string;
       showBackButton?: boolean;
       className?: string;
+      layoutClassName?: string;
     }) || {};
   const { t } = useTranslation();
 
@@ -63,6 +64,7 @@ function Layout() {
             description={description ? t(description) : undefined}
             showBackButton={showBackButton}
             className={className}
+            layoutClassName={layoutClassName}
           >
             <Outlet />
           </PageLayout>
