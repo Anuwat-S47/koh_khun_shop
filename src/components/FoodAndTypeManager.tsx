@@ -366,7 +366,7 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
         </div>
 
         {/* รายการอาหาร Grid */}
-        <div className="p-4 flex-1">
+        <div className="p-4 flex-1 overflow-y-auto max-h-none lg:max-h-[calc(100vh-200px)]">
           {/* Loading State */}
           {isFoodsLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -467,34 +467,33 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
                 ))}
               </div>
             )}
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-3 pt-6 pb-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
-                className="h-8 text-xs rounded-xl px-3"
-              >
-                {t.pagination.prev}
-              </Button>
-              <span className="text-xs font-semibold text-slate-600">
-                {t.pagination.page} {page} / {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= totalPages}
-                onClick={() => setPage(page + 1)}
-                className="h-8 text-xs rounded-xl px-3"
-              >
-                {t.pagination.next}
-              </Button>
-            </div>
-          )}
         </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3 pt-6 pb-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className="h-8 text-xs rounded-xl px-3"
+            >
+              {t.pagination.prev}
+            </Button>
+            <span className="text-xs font-semibold text-slate-600">
+              {t.pagination.page} {page} / {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page >= totalPages}
+              onClick={() => setPage(page + 1)}
+              className="h-8 text-xs rounded-xl px-3"
+            >
+              {t.pagination.next}
+            </Button>
+          </div>
+        )}
       </main>
 
       {/* Dialog Modals */}
