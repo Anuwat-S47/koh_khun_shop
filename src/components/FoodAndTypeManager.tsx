@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,8 @@ import {
   X,
   Layers,
   MoreVertical,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -20,6 +22,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import Swal from "sweetalert2";
 
 import { useTranslation } from "@/features/translations/hooks/useTranSlation";
@@ -31,13 +39,133 @@ import {
   useDeleteFood,
   useGetFoods,
 } from "@/features/food-manage/hooks/useFoodManage";
-import { useFoodStore } from "@/features/food-manage/stores/foodStore";
 
 import { FoodType } from "@/features/food-type-manage/types/food_type_manage_type";
 import { FoodTypeCreateDialog } from "@/features/food-type-manage/components/FoodTypeCreateDialog";
 import { FoodTypeEditDialog } from "@/features/food-type-manage/components/FoodTyoeEditDialog";
 import { FoodCreateDialog } from "@/features/food-manage/components/FoodAddDialog";
 import { FoodEditDialog } from "@/features/food-manage/components/FoodEditDialog";
+
+// จำนวนอาหารต่อ 1 สไลด์ (1 หน้า) — 12 หารลงตัวกับ 2, 3, 4 คอลัมน์
+const FOODS_PER_SLIDE = 12;
+
+type FoodSlideProps = {
+  shopId: number;
+  slideIndex: number; // เริ่มที่ 0
+  searchQuery: string;
+  activeTypeId: number | null;
+  isDeleting: boolean;
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
+};
+
+// 1 สไลด์ = 1 หน้า ดึงข้อมูลของหน้านั้นเอง (ถูก cache โดย React Query)
+function FoodSlide({
+  shopId,
+  slideIndex,
+  searchQuery,
+  activeTypeId,
+  isDeleting,
+  onEdit,
+  onDelete,
+}: FoodSlideProps) {
+  const { t } = useTranslation();
+  const { data, isLoading, isError } = useGetFoods(
+    shopId,
+    slideIndex + 1,
+    FOODS_PER_SLIDE,
+    searchQuery,
+    activeTypeId,
+  );
+
+  const gridClass =
+    "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4";
+
+  if (isLoading) {
+    return (
+      <div className={gridClass}>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} className="h-64 w-full rounded-2xl" />
+        ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="py-12 text-center rounded-2xl bg-red-50/50 border border-red-100">
+        <p className="text-sm font-medium text-red-600">
+          {t.foodType.loadFailed}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={gridClass}>
+      {data?.data.map((food) => (
+        <div
+          key={food.id}
+          className="group flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-3 transition-all hover:border-amber-400 hover:shadow-md"
+        >
+          <div>
+            {/* รูปภาพอาหาร */}
+            <div className="h-32 sm:h-36 w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-100 mb-3 relative">
+              {food.imgUrl ? (
+                <img
+                  src={food.imgUrl}
+                  alt={food.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-xs text-slate-400 font-medium">
+                  {t.food.noImage}
+                </div>
+              )}
+              {food.type?.name && (
+                <span className="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-medium truncate max-w-[80%]">
+                  {food.type.name}
+                </span>
+              )}
+            </div>
+
+            {/* ชื่อและราคา */}
+            <div className="space-y-1">
+              <h4 className="font-bold text-slate-800 text-sm truncate group-hover:text-amber-600 transition-colors">
+                {food.name}
+              </h4>
+              <p className="text-base font-extrabold text-amber-600">
+                ฿{Number(food.price).toLocaleString()}
+              </p>
+            </div>
+          </div>
+
+          {/* ปุ่มแก้ไข / ลบ */}
+          <div className="grid grid-cols-2 gap-2 pt-3 mt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => onEdit(food.id)}
+              className="flex items-center justify-center gap-1.5 py-2 text-xs text-slate-700 hover:text-amber-700 font-medium rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200/80 hover:border-amber-200 transition-colors active:scale-95"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              แก้ไข
+            </button>
+            <button
+              type="button"
+              disabled={isDeleting}
+              onClick={() => onDelete(food.id)}
+              className="flex items-center justify-center gap-1.5 py-2 text-xs text-red-600 hover:text-red-700 font-medium rounded-xl bg-slate-50 hover:bg-red-50 border border-slate-200/80 hover:border-red-200 transition-colors disabled:opacity-50 active:scale-95"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              ลบ
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 type FoodAndTypeManagerProps = {
   shopId: number;
@@ -61,7 +189,10 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
   const [foodEditOpen, setFoodEditOpen] = useState(false);
   const [selectedFoodId, setSelectedFoodId] = useState<number | null>(null);
 
-  const { page, pageSize, setPage } = useFoodStore();
+  // Carousel API สำหรับรู้ว่าอยู่สไลด์ไหน
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
 
   // React Query Hooks
   const {
@@ -76,12 +207,28 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
     data: foods,
     isLoading: isFoodsLoading,
     isError: isFoodsError,
-  } = useGetFoods(shopId, page, pageSize, searchQuery, activeTypeId);
+  } = useGetFoods(shopId, 1, FOODS_PER_SLIDE, searchQuery, activeTypeId);
 
   const { mutateAsync: deleteFood, isPending: isFoodDeleting } =
     useDeleteFood();
 
-  const totalPages = foods?.totalPages ?? 1;
+  // จำนวนสไลด์ทั้งหมด คำนวณจากจำนวนอาหารทั้งหมดที่ API ส่งมา
+  const totalSlides = Math.ceil((foods?.total ?? 0) / FOODS_PER_SLIDE);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    setCurrentSlide(carouselApi.selectedScrollSnap());
+    const onSelect = () => setCurrentSlide(carouselApi.selectedScrollSnap());
+    carouselApi.on("select", onSelect);
+    return () => {
+      carouselApi.off("select", onSelect);
+    };
+  }, [carouselApi]);
+
+  // เปลี่ยนหน้าแล้วเลื่อนรายการกลับไปบนสุด
+  useEffect(() => {
+    listRef.current?.scrollTo({ top: 0 });
+  }, [currentSlide]);
 
   // Handler: จัดการประเภทอาหาร
   const handleDeleteType = (id: number, e?: React.MouseEvent) => {
@@ -123,13 +270,11 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
   // Handler: จัดการรายการอาหาร
   const handleSearch = () => {
     setSearchQuery(search);
-    setPage(1);
   };
 
   const handleResetSearch = () => {
     setSearch("");
     setSearchQuery("");
-    setPage(1);
   };
 
   const handleDeleteFood = (id: number) => {
@@ -197,7 +342,6 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
               type="button"
               onClick={() => {
                 setActiveTypeId(null);
-                setPage(1);
               }}
               className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                 activeTypeId === null
@@ -255,7 +399,6 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
                       type="button"
                       onClick={() => {
                         setActiveTypeId(type.id);
-                        setPage(1);
                       }}
                       className="flex-1 text-left px-3 py-2.5 text-xs truncate"
                     >
@@ -301,7 +444,7 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
       </aside>
 
       {/* ================= ฝั่งขวา: รายการอาหาร ================= */}
-      <main className="flex-1 flex flex-col bg-white">
+      <main className="flex-1 flex flex-col bg-white min-w-0">
         {/* Header และช่องค้นหา */}
         <div className="p-4 border-b border-slate-100 space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -317,7 +460,7 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
                   {activeTypeId === null
                     ? "แสดงอาหารทั้งหมดในร้าน"
                     : `กำลังแสดงหมวดหมู่: ${
-                        foodTypes?.find((t) => t.id === activeTypeId)?.name ||
+                        foodTypes?.find((ft) => ft.id === activeTypeId)?.name ||
                         ""
                       }`}
                 </p>
@@ -365,8 +508,11 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
           </div>
         </div>
 
-        {/* รายการอาหาร Grid */}
-        <div className="p-4 flex-1 overflow-y-auto max-h-none lg:max-h-[calc(100vh-200px)]">
+        {/* รายการอาหาร (Carousel) */}
+        <div
+          ref={listRef}
+          className="p-4 flex-1 overflow-y-auto overflow-x-hidden max-h-none lg:max-h-[calc(100vh-200px)]"
+        >
           {/* Loading State */}
           {isFoodsLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -397,100 +543,89 @@ export function FoodAndTypeManager({ shopId }: FoodAndTypeManagerProps) {
               </div>
             )}
 
-          {/* Food Grid List */}
-          {!isFoodsLoading &&
-            !isFoodsError &&
-            foods?.data &&
-            foods.data.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {foods.data.map((food) => (
-                  <div
-                    key={food.id}
-                    className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-3 transition-all hover:border-amber-400 hover:shadow-md"
-                  >
-                    <div>
-                      {/* รูปภาพอาหาร */}
-                      <div className="h-36 w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-100 mb-3 relative">
-                        {food.imgUrl ? (
-                          <img
-                            src={food.imgUrl}
-                            alt={food.name}
-                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-xs text-slate-400 font-medium">
-                            {t.food.noImage}
-                          </div>
-                        )}
-                        {food.type?.name && (
-                          <span className="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-medium truncate max-w-[80%]">
-                            {food.type.name}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* ชื่อและราคา */}
-                      <div className="space-y-1">
-                        <h4 className="font-bold text-slate-800 text-sm truncate group-hover:text-amber-600 transition-colors">
-                          {food.name}
-                        </h4>
-                        <p className="text-base font-extrabold text-amber-600">
-                          ฿{Number(food.price).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* ปุ่มแก้ไข / ลบ (ขยายพื้นที่กดให้เหมากับนิ้วสัมผัส) */}
-                    <div className="grid grid-cols-2 gap-2 pt-3 mt-3 border-t border-slate-100">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedFoodId(food.id);
+          {/* Food Carousel: 1 สไลด์ = 1 หน้า โหลดทีละหน้าเมื่อเลื่อนมาใกล้ */}
+          {!isFoodsLoading && !isFoodsError && totalSlides > 0 && (
+            <Carousel
+              // key ทำให้ Carousel รีเซ็ตกลับหน้าแรกเมื่อเปลี่ยนหมวด/คำค้นหา
+              key={`${activeTypeId}-${searchQuery}`}
+              setApi={setCarouselApi}
+              opts={{ align: "start" }}
+              className="w-full"
+            >
+              <CarouselContent>
+                {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+                  <CarouselItem key={slideIndex} className="basis-full">
+                    {/* โหลดเฉพาะสไลด์ปัจจุบัน และสไลด์ก่อน/หลัง 1 หน้า */}
+                    {Math.abs(slideIndex - currentSlide) <= 1 ? (
+                      <FoodSlide
+                        shopId={shopId}
+                        slideIndex={slideIndex}
+                        searchQuery={searchQuery}
+                        activeTypeId={activeTypeId}
+                        isDeleting={isFoodDeleting}
+                        onEdit={(id) => {
+                          setSelectedFoodId(id);
                           setFoodEditOpen(true);
                         }}
-                        className="flex items-center justify-center gap-1.5 py-2 text-xs text-slate-700 hover:text-amber-700 font-medium rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200/80 hover:border-amber-200 transition-colors active:scale-95"
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                        แก้ไข
-                      </button>
-                      <button
-                        type="button"
-                        disabled={isFoodDeleting}
-                        onClick={() => handleDeleteFood(food.id)}
-                        className="flex items-center justify-center gap-1.5 py-2 text-xs text-red-600 hover:text-red-700 font-medium rounded-xl bg-slate-50 hover:bg-red-50 border border-slate-200/80 hover:border-red-200 transition-colors disabled:opacity-50 active:scale-95"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        ลบ
-                      </button>
-                    </div>
-                  </div>
+                        onDelete={handleDeleteFood}
+                      />
+                    ) : (
+                      <div className="min-h-[300px]" />
+                    )}
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          )}
+        </div>
+
+        {/* ตัวเปลี่ยนหน้า: อยู่นอกกล่องที่เลื่อน จึงมองเห็นตลอด */}
+        {!isFoodsLoading && !isFoodsError && totalSlides > 1 && (
+          <div className="flex items-center justify-center gap-3 border-t border-slate-100 px-4 py-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label={t.pagination.prev}
+              disabled={currentSlide === 0}
+              onClick={() => carouselApi?.scrollPrev()}
+              className="h-8 w-8 rounded-xl"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            {totalSlides <= 7 && (
+              <div className="flex items-center gap-1.5">
+                {Array.from({ length: totalSlides }).map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    aria-label={`${t.pagination.page} ${i + 1}`}
+                    onClick={() => carouselApi?.scrollTo(i)}
+                    className={`h-2 rounded-full transition-all ${
+                      i === currentSlide
+                        ? "w-6 bg-amber-500"
+                        : "w-2 bg-slate-300 hover:bg-slate-400"
+                    }`}
+                  />
                 ))}
               </div>
             )}
-        </div>
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-3 pt-6 pb-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-              className="h-8 text-xs rounded-xl px-3"
-            >
-              {t.pagination.prev}
-            </Button>
-            <span className="text-xs font-semibold text-slate-600">
-              {t.pagination.page} {page} / {totalPages}
+
+            <span className="min-w-20 text-center text-xs font-semibold text-slate-600">
+              {t.pagination.page} {currentSlide + 1} / {totalSlides}
             </span>
+
             <Button
+              type="button"
               variant="outline"
-              size="sm"
-              disabled={page >= totalPages}
-              onClick={() => setPage(page + 1)}
-              className="h-8 text-xs rounded-xl px-3"
+              size="icon"
+              aria-label={t.pagination.next}
+              disabled={currentSlide >= totalSlides - 1}
+              onClick={() => carouselApi?.scrollNext()}
+              className="h-8 w-8 rounded-xl"
             >
-              {t.pagination.next}
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         )}
