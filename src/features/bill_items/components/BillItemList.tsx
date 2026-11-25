@@ -6,21 +6,14 @@ interface Props {
 }
 
 export function BillItemList({ items }: Props) {
-  if (items.length === 0) {
-    return (
-      <div className="py-8 text-center text-sm text-gray-400">
-        ไม่มีรายการอาหารในบิล
-      </div>
-    );
+  if (!items || items.length === 0) {
+    return <p className="py-4 text-center text-gray-400">ไม่พบรายการอาหาร</p>;
   }
 
   return (
     <div className="divide-y divide-gray-100">
       {items.map((item) => (
-        <BillItemRow
-          key={item.id}
-          item={item}
-        />
+        <BillItemRow key={item.id} item={item} />
       ))}
     </div>
   );
